@@ -1,0 +1,136 @@
+ %\SweaveOpts{prefix.string=prova3e,
+%\SweaveOpts{prefix.string=figs/av01,width=6,height=6,eps=TRUE}
+\documentclass[11pt,a4]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil,brazilian]{babel}
+\usepackage[top=0.5cm,left=0.7cm,bottom=0.5cm,right=1.2cm,nohead]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{array}
+
+%\excludecomment{solucao}
+\includecomment{solucao}
+\renewcommand\ThisComment[1]{%
+  \immediate\write\CommentStream{\unexpanded{#1}}%
+}
+
+%\usepackage{Sweave}
+\title{CE-315: Inferência Bayesiana -- $1^a$ Prova (17/10/2024)}
+\author{\textbf{GRR: }  \raisebox{-0.5ex}{\rule{1.4in}{0.01in}} \textbf{Nome: } \raisebox{-0.5ex}{\rule{3.8in}{0.01in}} }
+\date{}
+
+<<echo=FALSE,results="hide">>=
+options(width=85, digits=4)
+par(mar=c(3.5,3.5, 0.5, 0.5), mgp=c(1.8,.9,0))
+@ 
+
+\begin{document}
+\maketitle
+
+%\vspace{-0.5in}
+\pagestyle{empty}
+\thispagestyle{empty}
+
+\sloppy
+
+\begin{enumerate}
+
+\item Modela-se com a distribuição binomial negativa o número de entrevistas necessárias para se conseguir três candidatos aprovados em uma fase inicial de um processo seletivo. Considera-se uma abordagem Bayesiana. Não se tem ideia da probabilidade de aprovação e decide-se por uma distribuição {\it a priori} que reflita tal situação. Em uma rodada de seleção foram necessárias 20 entrevistas para se conseguir os três aprovados. 
+  \begin{enumerate}
+  \item Escreva a função de densidade de probabilidades para a probabilidade de aprovação antes da rodada de seleção.
+  \item Escreva a função de verossimilhança. 
+  \item Reconheça uma distribuição de probabilidades proporcional à esta expressão da verossimilhança. Qual é a distribuição e com quais valores de parâmetros? 
+  \item Forneça a expressão de uma distribuição à {\it priori} conjugada que poderia ser utilizada caso houvesse alguma suspeita sobre valores não uniformes para a probabilidade de aprovação.
+  \item Qual(ais) valor(es) você especificaria para o(s) parâmetro(s) da distribuição {\it priori} conjugada (hiperparâmetros) neste caso? Justifique.
+  \item Como é obtida a distribuição marginal (preditiva a priori)?
+  \item Explique como faria para simular valores desta distribuição marginal.
+  \item Obtenha a expressão da posteriori e indique qual a distribuição de probabilidades.
+  \item Qual(ais) quantidade(s) calculada(s) com a amostra são necessárias para a obtenção da verossimilhança e posteriori?
+  \item Forneça a expressão da distribuição a posteriori para $\theta$ com os dados da rodada de seleção.
+  \item Qual o valor esperado da distribuição a posteriori para $\theta$?
+%  \item Mostre que o valor esperado da posteriori é uma média ponderada entre o valor esperado da priori e do estimador de máxima verossimilhança. 
+  \item Como poderia ser obtida a distribuição preditiva para uma nova observação após obter esta primeira amostra?
+  \item Como obter o valor esperado da preditiva do item anterior?
+  \item Foi necessário fazer uma segunda rodada de seleção na qual foram necessárias 15 entrevistas para se conseguir os 3 aprovados. Qual a posteriori após também considerar os dados desta segunda rodada de seleção? 
+  \end{enumerate}
+
+\item Dentre usuários que se cadastram em uma plataforma, 20\% declaram ter menos de 25 anos e acredita-se que destes, 10\% utiliza perfil falso. Entre 25 e 50 anos são 50\% dos usuários, com 20\% deles sendo perfis falsos. Acima de 50 anos são 30\% dos usuários e 5\% deles com perfis falso. Toma-se um usuário ao acaso e verifica-se que possui perfil falso.
+\begin{enumerate}
+\item Sem fazer contas, qual faixa etária que voce espera ser a deste usuário? Justifique.
+\item Qual a probabilidade de ser de cada uma das faixas etárias? Resolva a problema da forma que achar adequada.
+\item Considere agora o problema do ponto de vista Bayesiano.
+\begin{itemize}
+\item Qual é a variável resposta $(Y)$ e sua distribuição?0
+\item Qual é o parâmetro $(\theta)$ e sua distribuição a {\it priori}?
+\item Qual a verossimilhança? E a {\it posteriori}? E a marginal (preditiva)?
+\end{itemize}
+\item Esboce um gráfico da {\it priori} e da {\it posteriori}.
+\item Interprete os resultados.
+\item Agora que resolveu o problema, a qual faixa etária voce espera o usuário pertencer? Justifique.
+\item As proporções de perfis masculinos são de 15\%, 30\% e 55\% para as faixas etárias de menos de 25 anos, entre 25 e 50 anos e acima de 50 anos, respectivamente. Se o usuário de perfil falso selecionado for do sexo masculino, qual a probabilidade de pertencer a cada uma das faixas etárias?
+\end{enumerate}
+
+\newpage
+
+\item Indique para cada trecho de código a seguir o modelo usado e o que está sendo obtido.
+  
+\begin{enumerate}
+
+\item
+<<eval = FALSE>>=
+vec1 <- runif(1E5)
+vec2 <- rbinom(1E5, size = 20, prob = vec1)
+plot(table(factor(vec2, levels = 0:20)), type = 'h')
+mean(vec2 > 5)
+vec3 <- rbeta(1E5, 8+1, (20-8)+1)
+hist(vec3, freq = FALSE, nclass = 30)
+mean(vec3 < 0.30)
+@ 
+
+\item
+<<eval = FALSE>>=
+curve(dbeta(x, 2, 8), ylim = c(0, 7))
+curve(dbeta(x, 2 + 10, 8 + 30), col = 4, add = TRUE)
+vec1 <- rbeta(1E5, 2 + 10, 8 + 30)
+vec2 <- rbinom(1E5, size = 1, prob = vec1)
+prop.table(table(vec2))
+@
+
+\item
+<<eval = FALSE>>=
+vec1 <- runif(1E5, 0.35, 0.65)
+vec2 <- rgeom(1E5, prob = vec1)
+plot(table(factor(vec2, levels = 0:max(vec2))), type = 'h')
+mean(vec2 > 5)
+hist(vec1[vec2 == 3], freq = FALSE, nclass = 30)
+@ 
+
+\item
+<<eval = FALSE>>=
+vec1 <- rgamma(1E6, shape = 5, rate = 2)
+vec2 <- rpois(1E6, lambda = vec1)
+vec3 <- vec1[vec2 == 5]
+hist(vec3, freq = FALSE, nclass = 30)
+vec4 <- rpois(1E6, lambda = vec3)
+plot(table(factor(vec4, levels = 0:max(vec4))), type = "h")
+@
+
+\item
+<<eval = FALSE>>=
+vec1 <- abs(rnorm(1E5, mean = 0, sd = 2))  
+vec2 <- rpois(1E6, lambda = vec1)
+hist(vec1[vec2 == 5], freq = FALSE, nclass = 30)
+@
+\end{enumerate}
+
+
+\item Explique o algorítmo de {\it Naïve Bayes} para classificação, utilizando o contexto da Questão~2. Quais são as característica, vantagens e desvantagens deste método?
+  
+
+\item Explique distribuição amostral, função de verossimilhança e distribuição {\it a posteriori} e como estão relacionadas a {\it paradigmas} de inferência estatística.
+  
+\end{enumerate}
+
+\end{document}
+

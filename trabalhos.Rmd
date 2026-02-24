@@ -1,0 +1,19 @@
+---
+title: "Trabalhos do curso"
+output:
+  html_document:
+    toc: false
+---
+
+
+- [Trabalho 1: Inferência Bayesiana para um parâmetro](./trabalhos/TrabInfBayes1Par.html) 
+
+<!--
+- [Trabalho 2: Reescrita e computação questões da prova 2](./trabalhos/ce315-prova2-2024.pdf)
+-->
+
+
+<!--
+- [Trabalho 2: Aplicação](./trabalhos/TrabInfBayesAplica.html) 
+-->
+

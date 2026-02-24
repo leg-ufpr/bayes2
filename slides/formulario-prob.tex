@@ -1,0 +1,124 @@
+\documentclass[9pt,a4paper]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsthm, amssymb, amstext}
+\usepackage{array}
+%\usepackage{amssymb,amsthm,latexsym,amsmath}
+\usepackage{setspace,calc,longtable,lscape}
+% \setlength{\voffset}{-0.9in}
+% \setlength{\hoffset}{-1in}
+% \setlength{\topmargin}{10mm}
+% \setlength{\oddsidemargin}{10mm}
+% \setlength{\textwidth}{210mm-10mm-\oddsidemargin}
+% \setlength{\textheight}{297mm-5mm-\topmargin-\headheight-\headsep}
+\usepackage[margin=0.15in]{geometry}
+
+\begin{document}
+\pagestyle{empty}
+%\center{\LARGE {Formulário de Estatística}}
+
+%\input{formulas1-prob}
+
+\thispagestyle{empty}
+\centering{\paragraph{Probabilidades}{\mbox{}}}
+
+% \begin{align*}
+% 	\mu_Y = E[Y] &= \sum_i y_i P(Y=y_i) & \mbox{} & \sigma^2_Y = Var[Y] = \sum_i (y_i-\mu_y)^2 P(Y=y_i)\\
+% 	\mu_Y = E[Y] &= \int y f_Y(y) dy  & \mbox{}  & \sigma^2_Y = Var[Y] = \int (y-\mu_y)^2  f_Y(y) \\ 
+% 	Y &= g(Y)    & \Rightarrow & f_Y(y) = f_Y(g^{-1}(y)) \left| \frac{{\rm d}}{{\rm d}y}g^{-1}(y)\right|
+% \end{align*}
+
+\begin{minipage}[c]{0.30\textwidth}
+\begin{align*}
+  \mu_Y = E[Y] &= \sum_i y_i P(Y=y_i)\\
+  \mu_Y = E[Y] &= \int y f_Y(y) dy \\
+  E_Y[Y] &= E_{X}[E_{Y|X}[Y|X]] 
+\end{align*}
+\end{minipage}%
+\begin{minipage}[c]{0.45\textwidth}
+\begin{align*}
+  \sigma^2_Y = Var[Y] &= \sum_i (y_i-\mu_y)^2 P(Y=y_i) \\
+  \sigma^2_Y = Var[Y] &= \int (y-\mu_y)^2  f_Y(y) \\
+  E_Y[Y] &= E_{X}[V_{Y|X}[Y|X]] + V_{X}[E_{Y|X}[Y|X]]
+\end{align*}
+\end{minipage}%
+\begin{minipage}[c]{0.25\textwidth}
+\begin{align*}
+  T &= g(T) \Rightarrow \\
+  f_T(t) &= f_Y(g^{-1}(y)) \left| \frac{{\rm d}}{{\rm d}t}g^{-1}(t)\right| 
+\end{align*}
+\end{minipage}
+
+
+\vspace{0.3cm}
+\centering{\paragraph{Distribuições de Probabilidade}{\mbox{}}}
+
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+
+%\begin{footenotesize}
+\begin{tabular}{lllll} 
+\hline
+Distribuição & Probab./Densidade & Domínio & E[Y] & Var[Y] \\
+\hline
+$Y \sim {\rm U}(k)$ & $\frac{1}{k}$ & $y=1, 2, \ldots, k$  & $\frac{min(Y) + max(Y)}{2}$ & $\sqrt{\frac{(max(Y) - min(Y) + 1)^2 -1}{12}}$  \\
+\\
+$Y \sim {\rm B}(n,p)$ & $\binom{n}{y} p^y (1-p)^{n-y}$ & $y=0, 1, 2, \ldots, n$ 
+&  $np$ & $np(1-p)$ \\
+\\
+$Y \sim {\rm HG}(N, K, n)$ & $\frac{\binom{K}{y}\binom{N-K}{n-y}}{\binom{N}{n}}$ &  $y=0, 1, \ldots, {\rm min}(K,n)$ & $np$ & $np(1-p)\frac{N-n}{N-1}$ \\
+\\
+$Y \sim {\rm P}(\lambda)$ &  $\frac{e^{-\lambda} \lambda^y}{y!}$ & $y=0, 1, 2, \ldots$ & $\lambda$ & $\lambda$ \\
+\\
+$Y \sim {\rm G}(p)$ &  $(1-p)^{y}p$ & $y=0, 1, 2, \ldots$
+& $\frac{1-p}{p}$ & $\frac{(1-p)}{p^2}$ \\
+\\
+$Y \sim {\rm BN}(r,p)$ &  $\binom{y+r-1}{r-1} (1-p)^{y} p^r$ & $y=0, 1, 2, \ldots$ 
+& $\frac{r(1-p)}{p}$ & $\frac{r(1-p)}{p^2}$ \\
+%\\
+\hline
+$Y \sim {\rm U}[a,b]$ & $\frac{1}{b-a}$ & $a \leq y \leq b$ & $\frac{a+b}{2}$ & $\frac{(b-a)^2}{12}$ \\
+\\
+$Y \sim {\rm N}(\mu, \sigma^2)$ &  $\frac{1}{\sqrt{2\pi\sigma^2}}\exp\{-\frac{1}{2\sigma^2}(y - \mu)^2\}$ & $y \in (-\infty, \infty)$ & $\mu$ & $\sigma^2$ \\
+$Y \sim {\rm HN}(0, \sigma^2)$ &  $\frac{\sqrt{2}}{\sigma\sqrt{\pi}}\exp\{-\frac{y^2}{2\sigma^2}\} $ & $y \in (0, \infty)$ & $0$ & $\sigma^2$ \\
+$Y \sim {\rm LN}(\mu, \sigma^2)$ &  $\frac{1}{y \sqrt{2\pi\sigma^2}}\exp\{-\frac{1}{2\sigma^2}({\rm ln}(y) - \mu)^2\}$ & $y \in (-\infty, \infty)$ & $ \exp\{\mu + \sigma^2/2\}$ & $\exp\{2\mu + \sigma^2\}(\exp\{\sigma^2\} -1)$ \\
+\\
+$Y \sim {\rm Exp}(\lambda)$ & $ \lambda\exp(-\lambda y)$ & $y \geq 0$ & $\frac{1}{\lambda}$ & $\frac{1}{\lambda^2}$ \\
+$Y \sim {\rm Exp}(\phi)$ & $ \frac{1}{\phi}\exp(-y/\phi)$ & $y \geq 0$ & $\phi$ & $\phi^2$ \\
+\\
+$Y \sim {\rm Erlang}(\lambda, r)$ & $ \frac{\lambda^r}{(r-1)!} y^{r-1} \exp(-\lambda y)$ & $y \geq 0,  r = 1, 2, \ldots$ & 
+$ \frac{r}{\lambda}$ & $\frac{r}{\lambda^2}$ \\
+$Y \sim {\rm Ga}(p, q)$ & $\frac{q^p}{\Gamma(p)} \; y^{p-1} \; \exp\{-q y\}$ & $y \geq 0$  & $\frac{p}{q}$ & $\frac{p}{q^2}$  \\
+$Y \sim {\rm Ga}(\alpha, \beta)$ & $\frac{1}{\beta^\alpha\Gamma(\alpha)} \; y^{\alpha-1} \; \exp\{-y/\beta\}$ & $y \geq 0$  & $\alpha\beta$ & $\alpha\beta^2$  \\
+$Y \sim \chi^2(\nu)$ & $\frac{1}{2^{\nu/2}\Gamma(\nu/2) \, \beta^\alpha} \; y^{\nu/2 \,-1} \; \exp\{-y/2\}$ & $y \geq 0$  & $\nu$ & $2\nu$  \\
+$Y \sim I\chi^2(\nu)$ & $\frac{2^{\nu/2}}{\Gamma(\nu/2) \, \beta^\alpha} \; y^{-\nu/2 \,-1} \; \exp\{-1/2y\}$ & $y \geq 0$  & $\frac{1}{\nu-2}$ & $\frac{2}{(\nu-1)^2(\nu-4)}$  \\
+$Y \sim I\chi_{sc}^2(\nu,\varphi)$ & $\frac{(\nu/2)^{\nu/2}\varphi^{\nu/2}}{\Gamma(\nu/2)} y^{-\frac{\nu}{2}-1} e^{-\nu \varphi/(2y)}$ & $y \geq 0$  & $\frac{\nu \varphi}{\nu - 2}$ & $\frac{2\nu^2 \varphi^2}{[(\nu - 2)^2 (\nu - 4)]}$  \\
+$Y \sim {\rm IGa}(p, q)$ & $\frac{q^p}{\Gamma(p)} \; y^{-p-1} \; \exp\{-q/y)\}$ & $y \geq 0$  & $\frac{q}{p-1}$  & $\frac{q^2}{(p-1)^2(p-2)}$  \\
+	$Y \sim {\rm IGa}(\alpha, \beta)$ & $\frac{1}{\beta^\alpha\Gamma(\alpha)} \; y^{-\alpha-1} \; \exp\{-1/(\beta y)\}$ & $y \geq 0$  & $1/(\beta(\alpha-1))$  & $\frac{1}{\beta^2(\alpha-1)^2(\alpha-2)}$  \\
+\\
+$Y \sim {\rm UniGa}(\alpha, \beta)$ & $\frac{\alpha^{\beta}}{\Gamma(\beta)} y^{\alpha - 1} \left[\log\left(\frac{1}{y}\right) \right]^{\beta - 1}$  &  $y \in (0,1) $  & $\left(\frac{\alpha}{\alpha + 1}\right)^\beta$ &  $\left[\left(\frac{\alpha}{\alpha + 2}\right)^\beta - \left(\frac{\alpha}{\alpha + 1}\right)^{2\beta} \right]$ \\
+\\
+$Y \sim {\rm Weibull}(\alpha, \beta)$ & $\frac{\alpha}{\beta} \; (y/\beta)^{\alpha-1} \exp\{-(y/\beta)^{\alpha}\}$  &  $y \geq 0$  & $\beta \; \Gamma(1+\frac{1}{\alpha})$ &  $\beta^{2} \left[\Gamma(1+\frac{2}{\alpha}) - \Gamma^2(1+\frac{1}{\alpha}) \right]$ \\
+\\
+  $Y \sim {\rm Beta}(\alpha, \beta)$ & $\frac{1}{B(\alpha,\beta)} \; y^{\alpha-1} (1-y)^{\beta-1}$  &  $0 \leq y \leq 1$ & $\frac{\alpha}{\alpha+\beta}$ & $\frac{\alpha \; \beta}{(\alpha+\beta)^2 (\alpha + \beta + 1)}$ \\
+  $Y \sim {\rm BetaG}(\alpha, \beta, a, b)$ & $\frac{(b-a)^{-(\alpha+\beta-1)}}{B(\alpha,\beta)} (t-a)^{\alpha - 1} (b - t)^{\beta - 1}$  &  $a \leq y \leq b$ & $\frac{\alpha b + \beta a}{\alpha + \beta}$ & $\frac{(\alpha b + \beta a) - (c+d)}{\alpha+\beta-2}$  \\
+  \\
+$Y \sim {\rm Pareto}(\alpha, y_m)$ & $\frac{\alpha y_m^{\alpha}}{y^{\alpha+1}}$  &  $y \geq y_m$  & $\frac{\alpha y_m}{\alpha - 1}$ &  $\frac{\alpha y_m^2}{(\alpha - 1)^2 (\alpha - 2)}$ \\
+\\
+$Y \sim {\rm Lomax}(\alpha, \beta)$ & $\frac{\alpha}{\beta} \left[1 + \frac{y}{\beta} \right]^{-(\alpha+1)} = \alpha \frac{\beta^\alpha}{(\beta+y)^{\alpha + 1}}$  &  $t \geq 0$  & $\frac{\beta}{\alpha - 1}$ &  $\frac{\alpha \beta^2}{(\alpha - 1)^2 (\alpha - 2)}$ \\
+\\
+$Y \sim {\rm Logistica}(\mu, \lambda)$ & $\frac{e^{-(y-\mu)/\lambda}}{\lambda\left(1+e^{-(y-\mu)/\lambda}\right)^2}$  & $y \in (-\infty, \infty)$ & $\mu$ & $\frac{\lambda^2 \pi^2}{3}$ \\
+%$Y \sim GEV(\mu, \sigma, \yi)$ & $\frac{1}{\sigma}\left[1+\yi\left(\frac{y-\mu}{\sigma}\right)\right]^{(-1/\yi)-1} \exp\left\{-\left[1+\yi\left(\frac{y-\mu}{\sigma}\right)\right]^{-1/\yi}\right\}$ & $1+\yi(y-\mu)/\sigma>0$ & $\mu-\frac{\sigma}{\yi}+\frac{\sigma}{\yi}\Gamma(1-\yi)$ & $\frac{\sigma^2}{\yi^2}(\Gamma(1-2\yi)-\Gamma(1-\yi)^2)$ \\
+\hline
+\end{tabular}
+%\end{footnotesize}
+
+\begin{align*}
+  & Z = (Y-\mu)/\sigma &
+  &\Gamma(\alpha) = \int_0^{\infty} y^{\alpha-1} \; \exp\{-y\} \; dy &
+  & \Gamma(\alpha) = (\alpha-1)! &
+  & \Gamma(\alpha+1) = \alpha\;\Gamma(\alpha) &
+  &     B(\alpha, \beta) = \frac{\Gamma(\alpha)\Gamma(\beta)}{\Gamma(\alpha+\beta)}
+\end{align*}
+
+%$Y \sim N(\mu, \sigma^2)$ \;\; ; \;\; z = \frac{y-\mu}{\sigma}
+
+\end{document}

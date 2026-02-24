@@ -1,0 +1,62 @@
+ %\SweaveOpts{prefix.string=prova3e,
+%\SweaveOpts{prefix.string=figs/av01,width=6,height=6,eps=TRUE}
+\documentclass[11pt,a4]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil,brazilian]{babel}
+\usepackage[top=0.5cm,left=0.7cm,bottom=0.5cm,right=1.2cm,nohead]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{array}
+
+%\excludecomment{solucao}
+\includecomment{solucao}
+\renewcommand\ThisComment[1]{%
+  \immediate\write\CommentStream{\unexpanded{#1}}%
+}
+
+%\usepackage{Sweave}
+\title{CE-315: Inferência Bayesiana -- $1^a$ Prova (17/10/2024)}
+\author{\textbf{GRR: }  \raisebox{-0.5ex}{\rule{1.4in}{0.01in}} \textbf{Nome: } \raisebox{-0.5ex}{\rule{3.8in}{0.01in}} }
+\date{}
+
+<<echo=FALSE,results="hide">>=
+options(width=85, digits=4)
+par(mar=c(3.5,3.5, 0.5, 0.5), mgp=c(1.8,.9,0))
+@ 
+
+\begin{document}
+%\maketitle
+
+%\vspace{-0.5in}
+\pagestyle{empty}
+\thispagestyle{empty}
+
+\sloppy
+
+\begin{enumerate}
+
+\item Modela-se com a distribuição binomial negativa o número de entrevistas necessárias para se conseguir três candidatos aprovados em uma fase inicial de um processo seletivo. Considera-se uma abordagem Bayesiana. Não se tem ideia da probabilidade de aprovação e decide-se por uma distribuição {\it a priori} que reflita tal situação. Em uma rodada de seleção foram necessárias 20 entrevistas para se conseguir os três aprovados. 
+  \begin{enumerate}
+  \item Identifique o modelo, a variável observada e o parâmetro do modelo.
+  \item Escreva a função de densidade de probabilidades para o parâmetro do modelo.
+  \item Escreva a função de verossimilhança. 
+  \item Reconheça uma distribuição de probabilidades proporcional à esta expressão da verossimilhança. Qual é a distribuição e com quais valores de parâmetros? 
+  \item Forneça a expressão de uma distribuição à {\it priori} conjugada que poderia ser utilizada caso houvesse alguma suspeita sobre valores não uniformes para a probabilidade de aprovação.
+  \item Qual(ais) valor(es) você especificaria para o(s) parâmetro(s) da distribuição {\it priori} conjugada (hiperparâmetros) neste caso? Justifique.
+  \item Obter a expressão da distribuição marginal (preditiva a priori).
+  \item Explique como obter simulações dos valores desta distribuição marginal.
+  \item Obtenha a expressão da posteriori e identifique qual a distribuição de probabilidades.
+  \item Qual(ais) quantidade(s) calculada(s) com a amostra são necessárias para a obtenção da verossimilhança e posteriori?
+  \item Forneça a expressão da distribuição a posteriori para $\theta$ com os dados da rodada de seleção.
+  \item Qual o valor esperado da distribuição a posteriori para $\theta$?
+  \item Mostre que o valor esperado da posteriori é uma média ponderada entre o valor esperado da priori e do estimador de máxima verossimilhança. 
+  \item Obtenha a expressão da distribuição preditiva para uma nova observação após obter esta primeira amostra?
+  \item Como pode-se obter o valor esperado da preditiva do item anterior?
+  \item Foi necessário fazer uma segunda rodada de seleção na qual foram necessárias 15 entrevistas para se conseguir os 3 aprovados. Qual a posteriori após também considerar os dados desta segunda rodada de seleção? 
+  \end{enumerate}
+
+\end{enumerate}
+
+\end{document}
+

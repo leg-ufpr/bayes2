@@ -1,0 +1,25 @@
+body { background-color: #f3f3f3; }
+
+h1 {
+  font-size: 28px;
+  color: darkblue;
+}
+
+h1.title {
+  font-family: Arial;
+  font-size: 32px;
+  color: darkorange;
+}
+
+h2 {
+  font-size: 24px;
+  color: darkgreen;
+}
+
+h3 {
+  font-size: 20px;
+}
+
+h4 {
+  font-size: 18px;
+}

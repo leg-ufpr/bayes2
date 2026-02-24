@@ -1,0 +1,2254 @@
+%\SweaveOpts{prefix.string=prova3e,
+%\SweaveOpts{prefix.string=figs/av01,width=6,height=6,eps=TRUE}
+
+\documentclass[11pt,a4]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil,brazilian]{babel}
+\usepackage[top=0.5cm,left=0.7cm,bottom=0.5cm,right=1.2cm,nohead]{geometry}
+\usepackage{amssymb}   % símbolos matemáticos extras
+\usepackage{amsmath}
+\usepackage{amsbsy}    % símbolos matemáticos em negrito
+\usepackage{graphicx}
+\usepackage{comment}
+\usepackage{array}
+\usepackage{multirow}
+
+\excludecomment{solucao}
+%\includecomment{solucao}
+\renewcommand\ThisComment[1]{%
+  \immediate\write\CommentStream{\unexpanded{#1}}%
+}
+%\excludecomment{extra}
+\includecomment{extra}
+
+%\usepackage{Sweave}
+\title{Inferência Bayesiana}
+\author{}
+% \author{\textbf{GRR: }  \raisebox{-0.5ex}{\rule{1.4in}{0.01in}} \textbf{Nome: } \raisebox{-0.5ex}{\rule{3.8in}{0.01in}} }
+\date{}
+
+<<echo=FALSE,results="hide">>=
+options(width=85, digits=4)
+par(mar=c(3.5,3.5, 0.5, 0.5), mgp=c(1.8,.9,0))
+@ 
+
+\begin{document}
+\maketitle
+
+%\vspace{-0.5in}
+\pagestyle{empty}
+\thispagestyle{empty}
+
+\sloppy
+
+\begin{enumerate}
+
+%%%
+%%% $1^a$ Prova (17/10/2025)
+%%%
+\item Modela-se com a distribuição binomial negativa o número de entrevistas necessárias para se conseguir três candidatos aprovados em uma fase inicial de um processo seletivo. Considera-se uma abordagem Bayesiana. Não se tem ideia da probabilidade de aprovação e decide-se por uma distribuição {\it a priori} que reflita tal situação. Em uma rodada de seleção foram necessárias 20 entrevistas para se conseguir os três aprovados. 
+  \begin{enumerate}
+  \item Escreva a função de densidade de probabilidades para a probabilidade de aprovação antes da rodada de seleção.
+  \item Escreva a função de verossimilhança. 
+  \item Reconheça uma distribuição de probabilidades proporcional à esta expressão da verossimilhança. Qual é a distribuição e com quais valores de parâmetros? 
+  \item Forneça a expressão de uma distribuição à {\it priori} conjugada que poderia ser utilizada caso houvesse alguma suspeita sobre valores não uniformes para a probabilidade de aprovação.
+  \item Qual(ais) valor(es) você especificaria para o(s) parâmetro(s) da distribuição {\it priori} conjugada (hiperparâmetros) neste caso? Justifique.
+  \item Como é obtida a distribuição marginal (preditiva a priori)?
+  \item Explique como faria para simular valores desta distribuição marginal.
+  \item Obtenha a expressão da posteriori e indique qual a distribuição de probabilidades.
+  \item Qual(ais) quantidade(s) calculada(s) com a amostra são necessárias para a obtenção da verossimilhança e posteriori?
+  \item Forneça a expressão da distribuição a posteriori para $\theta$ com os dados da rodada de seleção.
+  \item Qual o valor esperado da distribuição a posteriori para $\theta$?
+%  \item Mostre que o valor esperado da posteriori é uma média ponderada entre o valor esperado da priori e do estimador de máxima verossimilhança. 
+  \item Como poderia ser obtida a distribuição preditiva para uma nova observação após obter esta primeira amostra?
+  \item Como obter o valor esperado da preditiva do item anterior?
+  \item Foi necessário fazer uma segunda rodada de seleção na qual foram necessárias 15 entrevistas para se conseguir os 3 aprovados. Qual a posteriori após também considerar os dados desta segunda rodada de seleção? 
+  \end{enumerate}
+
+\item Dentre usuários que se cadastram em uma plataforma, 20\% declaram ter menos de 25 anos e acredita-se que destes, 10\% utiliza perfil falso. Entre 25 e 50 anos são 50\% dos usuários, com 20\% deles sendo perfis falsos. Acima de 50 anos são 30\% dos usuários e 5\% deles com perfis falso. Toma-se um usuário ao acaso e verifica-se que possui perfil falso.
+\begin{enumerate}
+\item Sem fazer contas, qual faixa etária que voce espera ser a deste usuário? Justifique.
+\item Qual a probabilidade de ser de cada uma das faixas etárias? Resolva a problema da forma que achar adequada.
+\item Considere agora o problema do ponto de vista Bayesiano.
+\begin{itemize}
+\item Qual é a variável resposta $(Y)$ e sua distribuição?0
+\item Qual é o parâmetro $(\theta)$ e sua distribuição a {\it priori}?
+\item Qual a verossimilhança? E a {\it posteriori}? E a marginal (preditiva)?
+\end{itemize}
+\item Esboce um gráfico da {\it priori} e da {\it posteriori}.
+\item Interprete os resultados.
+\item Agora que resolveu o problema, a qual faixa etária voce espera o usuário pertencer? Justifique.
+\item As proporções de perfis masculinos são de 15\%, 30\% e 55\% para as faixas etárias de menos de 25 anos, entre 25 e 50 anos e acima de 50 anos, respectivamente. Se o usuário de perfil falso selecionado for do sexo masculino, qual a probabilidade de pertencer a cada uma das faixas etárias?
+\end{enumerate}
+
+\newpage
+
+\item Indique para cada trecho de código a seguir o modelo usado e o que está sendo obtido.
+  
+\begin{enumerate}
+
+\item
+<<eval = FALSE>>=
+vec1 <- runif(1E5)
+vec2 <- rbinom(1E5, size = 20, prob = vec1)
+plot(table(factor(vec2, levels = 0:20)), type = 'h')
+mean(vec2 > 5)
+vec3 <- rbeta(1E5, 8+1, (20-8)+1)
+hist(vec3, freq = FALSE, nclass = 30)
+mean(vec3 < 0.30)
+@ 
+
+\item
+<<eval = FALSE>>=
+curve(dbeta(x, 2, 8), ylim = c(0, 7))
+curve(dbeta(x, 2 + 10, 8 + 30), col = 4, add = TRUE)
+vec1 <- rbeta(1E5, 2 + 10, 8 + 30)
+vec2 <- rbinom(1E5, size = 1, prob = vec1)
+prop.table(table(vec2))
+@
+
+\item
+<<eval = FALSE>>=
+vec1 <- runif(1E5, 0.35, 0.65)
+vec2 <- rgeom(1E5, prob = vec1)
+plot(table(factor(vec2, levels = 0:max(vec2))), type = 'h')
+mean(vec2 > 5)
+hist(vec1[vec2 == 3], freq = FALSE, nclass = 30)
+@ 
+
+\item
+<<eval = FALSE>>=
+vec1 <- rgamma(1E6, shape = 5, rate = 2)
+vec2 <- rpois(1E6, lambda = vec1)
+vec3 <- vec1[vec2 == 5]
+hist(vec3, freq = FALSE, nclass = 30)
+vec4 <- rpois(1E6, lambda = vec3)
+plot(table(factor(vec4, levels = 0:max(vec4))), type = "h")
+@
+
+\item
+<<eval = FALSE>>=
+vec1 <- abs(rnorm(1E5, mean = 0, sd = 2))  
+vec2 <- rpois(1E6, lambda = vec1)
+hist(vec1[vec2 == 5], freq = FALSE, nclass = 30)
+@
+\end{enumerate}
+
+
+\item Explique o algorítmo de {\it Naïve Bayes} para classificação, utilizando o contexto da Questão~2. Quais são as característica, vantagens e desvantagens deste método?
+  
+
+\item Explique distribuição amostral, função de verossimilhança e distribuição {\it a posteriori} e como estão relacionadas a {\it paradigmas} de inferência estatística.
+
+%%%
+%%% Prova Final (19/12/2024)
+%%%
+
+ \item{ {\bf Os dados deste problema são hipotéticos, sem nenhuma base real}.\\
+  Suponha que os maiores partidos da Inglaterra,
+  ``Labour'', ``Conservative'', ``LibDems'',  obtiveram 35, 42 e 20\% dos votos em uma eleição recente.
+  O restante foi distribuído entre partidos menores.
+  Tem-se ainda que os percentuais de favoráveis ao BREXIT em cada um destes partidos é
+  de 15, 62 e 40\% respectivamente. Não se sabe sobre os demais mas assume-se que seja de 50\%.
+  Entrevistou-se uma pessoa que se declarou favorável ao BREXIT.
+  Qual a probabilidade de que ela seja apoiadora do ``Labour''? E dos ``LibDem''?
+  }
+%% mudar pergunta para LibDem sabendo que é contra o BREXIT
+  
+<<include = FALSE>>=
+theta <- c(Labour = 0.35, Tory = 0.42, LibDem = 0.20, Other = 0.03)
+y.theta <- c(0.15, 0.62, 0.40, 0.50)
+(thetaY <- theta * y.theta)
+(theta.y <- thetaY/sum(thetaY))
+@ 
+  
+\item{ No contexto do problema anterior:
+  \begin{enumerate}
+  \item Escreva os dados e quantidades de interesse na notação geral de variável observada $Y$ e parâmetro $\theta$.
+  \item Forneça a distribuição a priori do problema.
+  \item Forneça a verossimilhança do problema.
+  \item Encontre a distribuição à posteriori.
+  \item Esboçe um gráfico com distribuições priori e posteriori
+  \item Forneça a distribuição preditiva.
+  \end{enumerate}
+  }
+  
+<<include = FALSE, eval = FALSE>>=
+## priori
+Ptheta <- c(Labour = 0.35, Tory = 0.42, LibDem = 0.20, Other = 0.03)
+## verossimilhanças
+Py1.theta <- c(0.15, 0.62, 0.40, 0.50)
+Py0.theta <- 1 - y1.theta
+## Conjuntas
+(PthetaY1 <- Ptheta * Py1.theta)
+(PthetaY0 <- Ptheta * Py0.theta)
+## posterioris
+(Ptheta.y1 <- PthetaY1/sum(PthetaY1))
+(Ptheta.y0 <- PthetaY0/sum(PthetaY0))
+## preditivas
+Py <- c("0" = sum(PthetaY0), "1" = sum(PthetaY1)) 
+Py
+## plots
+par(mfrow = c(1,2))
+plot(1:4, Ptheta, type = "h", xaxt = "n", col = "red", xlim = c(0.5, 4.5), ylim = c(0, 0.65),
+     xlab = expression(theta), ylab = expression(group("[",theta, "]")))
+axis(1, (1:4), names(theta))
+lines((1:4)+0.1, Ptheta.y1, type = "h", col = "black")
+lines((1:4)-0.1, Ptheta.y0, type = "h", col = "blue")
+legend("topright",
+       c(expression(group("[",theta, "]")),
+         expression(group("[",paste(theta, "|", y == 1), "]")),
+         expression(group("[",paste(theta, "|", y == 0), "]"))
+         ), lty = 1, col = c("red","black","blue"), cex = 0.8
+       )
+##
+plot(0:1, Py, type = "h", ylim = c(0, 0.6), xlab = "y", ylab = "P[Y=y]", xaxt = "n")
+axis(1, 0:1, 0:1)
+@ 
+
+
+  
+\item Seja $y_1, \ldots, y_n$ uma amostra aleatória de uma distribuição com função probabilidades:
+\[ f(y|\theta) = \theta \exp\{-\theta y\} \]
+Obtenha a priori de Jeffreys, %% conjugada
+a expressão da posteriori, da marginal e da distribuição preditiva.
+
+<<include = FALSE>>=
+## simular da priori (vamos aproximar por discreta)
+th.seq <- seq(0.01, 0.5, length=1000)
+th.dpr <- 1/th.seq
+th.dpr <- th.dpr/sum(th.dpr)
+plot(th.seq, th.dpr, col = 2, type = "l")
+##
+n <- 20
+th.sim <- sample(th.seq, n, prob = th.dpr)
+y <- rexp(n, th.sim)
+##
+y.bar <- mean(y)
+1/y.bar
+curve(dgamma(x, n, n*y.bar), from = 0, to = 0.1)
+##
+## simulação simplificada (sem variar theta)
+th.true <- 0.1
+y <- rexp(n, th.true)
+##
+(y.bar <- mean(y))
+1/y.bar
+curve(dgamma(x, n, n*y.bar), from = 0, to = 0.2)
+## preditiva ## a soma está passando de 1 !!!
+dpred.y <- function(y, n, ybar) exp((n+1)*(log(n) - log(y+n*ybar)) + n*log(ybar))  
+sum(dpred.y(0:50, n = n , ybar = y.bar))
+sum(dpred.y(0:100, n = n , ybar = y.bar))
+sum(dpred.y(0:1000, n = n , ybar = y.bar))
+##dpred.y <- function(y, n, S) exp(n*(log(S) - log(y+S)) + log(n) - log(y+S))  
+##sum(dpred.y(0:100, n = n , S = n*y.bar))
+@ 
+
+\item No contexto do problema anterior imagine que está se medindo o tempo para atender clientes em um banco.
+  Forneça as expressões caso seja assumida como priori uma distribuição gama de média 0,25 e desvio padrão 1.
+  Além disto considere que foi observada uma amostra aleatória de 20 tempos de atendimento e o tempo médio dos dados
+  desta amostra foi de 4,8 minutos.
+
+\item Forneça os comandos para desenhar em um gráfico as curvas da priori, verossimilhança e posteriori do item anterior.
+
+
+
+\item Um experimento envolvendo uma série de reações químicas, 
+  que resulta em obter ou não o produto desejado, foi repetido 
+  consecutivamente (de forma independente), até que 
+  o terceiro resultado positivo fosse obtido. 
+  Para isto, foi necessário a realização de 12 experimentos no total.
+  Deseja-se fazer inferência sobre a proporção de séries de reações que 
+  resultam no produto desejado. 
+  Por não haver informação prévia, optou-se por utilizar a priori de Jeffreys.
+  Obtenha as expressões da priori e da posteriori. 
+  
+\item Suponha que $Y$ tenha uma distribuição de Pareto ${\rm Pa}(a, \theta)$, em que $a$ é conhecido mas $\theta$ é desconhecido. Desta forma,
+\begin{align*}
+  f(y|\theta) = \theta a^{\theta} y^{-\theta-1} \; ; \;\; (y > a) \\ 
+  {\rm E}[Y] = \frac{a\theta}{\theta-1} \mbox{ para } a > 1
+\end{align*}
+Encontre a priori de Jeffreys  %% conjugada
+e a correspondente distribuição posteriori para $\theta$.
+
+%%%
+%%% $2^a$ Prova (21/11/2024)
+%%%
+\item Encontre a priori de Jeffreys para $\theta$ no modelo geométrico:
+  \[ f(y|\theta) = (1-\theta)^{y} \theta \; ; \;\; y= 0, 1, 2, \ldots  \]
+  e obtenha as expressões da posteriori e preditiva para uma amostra $y_1, \ldots, y_n$.
+
+\begin{extra}
+  {\it Escolha e fixe um valor razoável para o parâmetro e simule uma amostra de tamanho $n=10$.
+    Explore graficamente o formato da priori. Mostre que a priori é imprória.
+    Obtenha os gráficos da posteriori e da preditiva posteriori.}
+\end{extra}
+
+  
+\begin{solucao}
+<<pr2-q1,fig.width = 9,fig.height = 3>>=
+require(latex2exp)  
+## priori
+prior.f <- function(theta) (1/theta)*(1/sqrt(theta))
+curve(prior.f, 0, 1)
+tryCatch(integrate(prior.f, 0, 1))
+##curve(dbeta(x, 0, 1/2))
+## dados
+## o correto seria gerar valores para o parmetro da priori, mas esta não é própria ...
+(y <- rgeom(10, 1/10))
+ny <- length(y)
+Sy <- sum(y)
+## e verossimilhança e posteriori
+par(mfrow=c(1,2))
+curve(dbeta(x, ny, Sy + 1/2), xlab = expression(theta), ylab = TeX(r"(\[\theta|y\])"))
+curve(dbeta(x, ny, Sy), col = 4, add = TRUE, lwd = 2)
+legend("topright", c("verossimilhança","posteriori"), lty = 1, col = c(4,1))
+curve(dbeta(x, ny, Sy + 1/2), xlim = c(0, 0.4), xlab = expression(theta), ylab = TeX(r"(\[\theta|y\])"))
+curve(dbeta(x, ny, Sy), col = 4, add = TRUE, xlim = c(0, 0.3))
+## preditivas (priori e posteriori)
+pred0.f <- function(yp) 1/(yp+1/2) ## imprória!! ver abaixo
+##pred.f <- function(yp, S, n)
+##    n*exp(lgamma(n+S+1/2) - lgamma(S+1/2) +
+##          lgamma(yp+S+1/2) - lgamma(n+1+yp+S+1/2))
+pred.f <- function(yp, S, n)
+    exp(lbeta(n+1, S + yp + 0.5) - lbeta(n, S + 0.5))
+yp <- 0:50
+plot(yp, pred0.f(yp), type = "h", xlab = "y", ylab = TeX(r"($\[y_p\]$)"))
+plot(yp, pred.f(yp, S = Sy, n = ny), type = "h", ylim = c(0, 0.30),
+     xlab = expression(y[p]), ylab = TeX(r"($\[y_p|y\]$)"))
+sum(pred0.f(yp))                 ## imprópria
+sum(pred.f(yp, S = Sy, n = ny))  ## própria !
+require(ggplot2)
+##ggplot() +
+##    xlim(0, 100) +
+##    stat_function(fun = pred.f, args=list(S = Sy, n = ny))
+pred <- data.frame(y = yp, py = pred.f(yp, S = Sy, n = ny))
+ggplot(pred) +
+    geom_segment(aes(x=y,xend=y,y=0,yend=py)) +
+    theme_bw()
+@ 
+\end{solucao}
+
+  
+\item Embora prioris conjugadas tornem a computação bayesiana
+  extremamente simples, elas podem não ser apropriadas e por vezes
+  simplesmente não existem (de forma útil) para o modelo que se deseja
+  ajustar. Explique como as análises devem ser conduzidas
+  neste caso, descrevendo pelo menos duas abordagens.
+
+\begin{extra}
+{\it Implemente as abordagens mencionadas. (sugestão: implementar ao menos a aproximação gaussiana e MCMC).}
+\end{extra}
+
+\begin{solucao}
+<<include = FALSE>>=
+@
+\end{solucao}
+
+
+\item Vai se modelar o número diário de acidentes em um trecho de rodovia com o modelo Poisson
+  com priori "half-normal". Mostre a expressão da posteriori (a uma constante) e indique se é (ou não) compatível com alguma distribuição conhecida.
+  Opta-se por fazer uma análise com aproximação discreta de cinco pontos.
+  O conjunto de dados é $0, 3, 2, 1, 0, 2$.
+  Escolha cinco pontos razoáveis e obtenha a posteriori (discreta) e calcule a sua média e moda.
+
+\begin{extra}
+  {\it Após obter a solução escrita implemente em um código. Faça inicialmente a aproximação de 5 pontos e depois obtenha a discretização com mais pontos.
+  Escreva também uma função para posteriori que inclua o cálculo da constante normalizadora por integração numérica. }
+\end{extra}
+  
+\begin{solucao}
+<<include = FALSE>>=
+extraDistr::dhnorm(1.2, sigma = 0.5)
+2*dnorm(1.2, sd = 0.5)
+@ 
+<<include = FALSE>>=
+BY <- 0.5
+(th <- seq(0.5, 2.5, by = BY))
+(th^2)/2
+MASS::fractions((th^2)/2)
+kHN <- function(par) exp(-(par^2)/2)
+(prior.d <- kHN(th))
+(prior.d <- prior.d/sum(prior.d))
+y <- c(0, 3, 2, 1, 0)
+Sy <- sum(y)
+ny <- length(y)
+kPois <- function(par, S, n) exp(-n*par) * par^S
+(vero.d <- kPois(th, S = Sy, n = ny))
+(ws <- prior.d * vero.d)
+(post.d <- ws/sum(ws))
+plot(th+BY/10, post.d, ty = "h", col = 1, xlim = c(0,3))
+lines(th-BY/10, prior.d, ty = "h", col = 2)
+legend("topright", c("prior","posterior"), lty = 1, col = 2:1)
+(post.E <- sum(th * post.d))
+(post.Mo <- th[which.max(post.d)])
+## redefinir th em um grid mais fino e repetir
+@ 
+\end{solucao}
+
+  
+\item Considere um modelo Gama para a distribuição de uma amostra aleatória de uma variável, ou seja,
+  \[ f(y|\alpha, \beta) = \frac{\beta^\alpha}{\Gamma(\alpha)} y^{\alpha-1} \exp\{-\beta y\} . \]
+Considere ainda prioris também Gama, independentes, para cada parâmetro.
+\begin{enumerate}
+  \item Obtenha a expressão da posteriori conjunta, a uma constante de proporcionalidade.
+  \item Indique como pode ser obtida a distribuição posteriori marginal de cada parâmetro, isto é, $f(\alpha|y)$ e $f(\beta|y)$. 
+  \item Obtenha a distribuição posteriori condicional de cada parâmetro, isto é, $f(\alpha|\beta, y)$ e $f(\beta|\alpha, y)$. 
+  \item Explique como seriam poderiam ser obtidas amostras da posteriori neste caso. %, (i) por simulação direta da posteriori (ii) pelo algorítmo de Gibbs.
+%  \item Neste exemplo, nos passos do Gibbs as amostras são obtidas diretamente de alguma distribuição conhecida ou é necessário usar algum algorítmo de rejeição (MCMC ou algum outro)? Justifique. 
+\end{enumerate}
+
+\begin{extra}
+  {\it Escolha valores dos hiperparâmetros do modelo e produza gráficos das prioris $f(\alpha)$, $f(\beta)$ e da conjunta
+    $f(\alpha, \beta)$. Use o modelo especificado para gerar uma amostra de $n = 12$ valores. Obtenha gráficos dos itens a) a c).
+    Obtenha amostras da posteriori conforme item d). Faça o histograma das amostras obtidas e sobreponha com a densidade (marginal) teórica.}
+\end{extra}
+
+\begin{solucao}
+<<include = FALSE, eval = FALSE>>=
+rm(list=ls())  
+## prioris 1D
+par(mfrow=c(1,2))
+a <- 5; b = 3
+curve(dgamma(x, a, b), from = 0, to = 10)
+p <- 1.5; q = 1
+curve(dgamma(x, p, q), from = 0, to = 10)
+## ## priori 2D
+df <- expand.grid(alpha = seq(0.2, 6, l=201),
+                 beta = seq(0.01, 6, l=201))
+priori.f <- function(pars)
+    exp(dgamma(pars[1], a, b, log = TRUE) + dgamma(pars[2], p, q, log = TRUE))
+df$priori <- apply(df, 1, priori.f)
+
+require(ggplot2)
+theme_set(theme_bw())
+ggplot(df, aes(alpha, beta, z = priori)) +
+    geom_contour(col = "red")
+## Simulando dados
+n <- 12
+(alpha.sim <- rgamma(n, a, b))
+(beta.sim <- rgamma(n, p, q))
+dfsim <- data.frame(alpha = alpha.sim, beta = beta.sim)
+curve(dgamma(x, a, b), from = 0, to = 10)
+abline(v = alpha.sim)
+curve(dgamma(x, p, q), from = 0, to = 10)
+abline(v = beta.sim)
+ggplot(data = df, aes(alpha, beta)) +
+    geom_contour(aes(z = priori), col = "red", data = df) +
+    geom_point(mapping = aes(x=alpha, y=beta), data = dfsim)
+##
+(dados <- rgamma(n, alpha.sim, beta.sim))
+ny <- length(dados)
+Sy <- sum(dados)
+##
+
+pars.df$prior <- apply(pars.df, 1, dlamth, priori = pr.hp)
+pars.df$vero <- apply(pars.df, 1, Llamth.y, priori = pr.hp, data = dados)
+pars.df$post <- apply(pars.df, 1, dlamth.y, priori = pr.hp, data = dados)
+pars.df$post2 <- apply(pars.df, 1, K2lamth.y, priori = pr.hp, data = dados)
+head(pars.df)
+
+##
+ggplot(pars.df, aes(lambda, theta)) +
+    geom_contour(aes(z = prior, color = "prior")) +
+    geom_contour(aes(z = vero, color = "vero")) +
+    geom_contour(aes(z = post, color = "post")) +
+    scale_color_manual(name = "",
+                       values = c("prior"="red", "vero"="blue", "post"="black")) +
+    theme(legend.position = "top")
+##    geom_contour(data = pars.df, aes(lambda, theta, z = post), col = "green")
+
+ggplot(pars.df, aes(lambda, theta)) +
+    geom_contour(aes(z = vero, color = "vero")) +
+    geom_contour(aes(z = post, color = "post")) +
+    scale_color_manual(name = "",
+                       values = c("vero"="blue", "post"="black")) +
+    theme(legend.position = "top")
+
+
+
+@ 
+\end{solucao}
+
+
+
+\item Foi visto que distribuições da família exponencial, isto é,  podem ser escritas na forma
+  \[ f(y|\theta) = h(y) g(\theta) \exp\{t(y) c(\theta)\}, \] 
+  possuem prioris conjugadas.
+  Use este resultado para obter, a partir da notação de família exponencial,
+  a priori conjugada para uma amostragem de $Y \sim {\rm Gama}(a, \theta)$
+  em que $a$ é conhecido e $\theta$ é o 
+  parâmetro desconhecido sobre o qual deseja-se fazer inferência.
+  Quais as quantidades amostrais (suficientes) necessárias para inferência?
+
+% \begin{extra}
+% {\it }
+% \end{extra}
+    
+\item Seja $Y|\theta \sim {\rm Bin}(n, \theta)$ a priori de $\theta$ uma mistura das distribuições ${\rm Beta}(1, 3)$ e $ {\rm Beta}(5, 2)$ com pesos 2/3 e 1/3, respectivamente. Uma amostra forneceu $y = 3, n = 9$. Esboce os gráficos de cada um de seus componentes da priori. Obtenha a expressão da posteriori e um esboço do seu gráfico.
+
+\begin{extra}
+{\it Obtenha os gráficos para priori e suas componentes, da verossimilhança e da posteriori. }
+\end{extra}
+
+\begin{solucao}
+<<>>=
+dpriori <- function(theta) (1/3)*dbeta(theta, 1, 3) + (2/3)*dbeta(theta, 5, 2)
+ap <-  function(x, w, a, b,...) w*dbeta(x, a, b)
+curve(ap(x, 1/3, 1, 3), lty = 2, col = 2, ylim = c(0, 3.5))
+curve(ap(x, 2/3, 5, 2), lty = 2, col = 2, add = TRUE)
+curve(dpriori(x), col = 2, add = TRUE)
+##
+n <- 9; y <- 3
+curve(dbeta(x, 10, 7), col = 4, add = TRUE)
+##
+w1 <- (1/3)*beta(1+3, 3+(9-3))/beta(1,3)
+w2 <- (2/3)*beta(5+3, 2+(9-3))/beta(5,2)
+p1s <- w1/(w1+w2)
+p2s <- w2/(w1+w2)
+dpost <- function(theta) (p1s)*dbeta(theta, 1+3, 3+(9-6)) +
+                             (p2s)*dbeta(theta, 5+3, 2+(9-6))
+curve(dpost(x), add = TRUE)
+@ 
+\end{solucao}
+
+
+%\newpage
+  
+\item A classificação de qualidade de um componente elétrico é excelente ($y = 1$), bom ($y = 2$) ou ruim ($y = 3$). A probabilidade de vários níveis de qualidade dependem da fábrica onde é produzido ($\theta_1 = 0$: fábrica A, $\theta_1 = 1$: fábrica B) e do tipo de máquina ($\theta_2 = 0$: máquina I, $\theta_2 = 1$: máquina II, $\theta_2 = 2$: máquina III). As probabilidades para $y = 2$ são dadas pela Tabela~\ref{tab:exerc1a-cap4}.
+Além disso, distribuição conjunta de $(\theta_1, \theta_2)$ é dada na Tabela~\ref{tab:exerc1b-cap4}.
+Encontre a distribuição posteriori conjunta de $\theta_1, \theta_2|y = 2$ e cada uma das distribuições marginais. Tendo observado $y = 2$:
+(a) qual a combinação fábrica/máquina é a mais provável de ter produzido esse componente? (b) Qual a posteriori (conjunta)? (c) Quais são as marginais? (d) E as condicionais?  
+
+
+\begin{table}[ht!]
+\centering
+\caption{Probabilidades condicionais $y = 2$}
+\label{tab:exerc1a-cap4}
+  \begin{tabular}{c| c c}
+    Pr($y = 2|\theta_1, \theta_2$)         &$\theta_1 = 0$          &$\theta_1 =1$\\
+    \hline
+    $\theta_2 = 0$                         &0,3                    &0,2\\
+    $\theta_2 = 1$                         &0,4                    &0,2\\
+    $\theta_2 = 2$                         &0,6                    &0,3\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\caption{Probabilidade a priori das combinações fábrica/máquina}
+\label{tab:exerc1b-cap4}
+  \begin{tabular}{c| c c}
+    Pr($\theta_1, \theta_2$)               &$\theta_1 = 0$          &$\theta_1 =1$\\
+    \hline
+    $\theta_2 = 0$                         &0,1                    &0,2\\
+    $\theta_2 = 1$                         &0,2                    &0,3\\
+    $\theta_2 = 2$                         &0,1                    &0,1\\
+    \hline  
+\end{tabular}
+\end{table}
+
+%\begin{extra}
+%{\it Obtenha gráficos da priori, verossimilhança e posteriori deste problema.}
+%\end{extra}
+
+\begin{solucao}
+\end{solucao}
+
+
+\item Um conjunto $y_1, y_2, \ldots, y_n$ é {\tt permutável} ({\it exchangeable}) se a probabilidade conjunta  $f(y_1, y_2, \ldots, y_n)$ é invariante a uma permutação $\pi$ dos índices,
+  ou seja,  $f(y_1, y_2, \ldots,y_n) = f(\pi(y_1), \pi(y_2), \ldots, \pi(y_n))$ para qualquer permutação $\pi$ dos índices.
+
+  Um conjunto $y_1, y_2, \ldots, y_n$ é {\tt independente} se a probabilidade conjunta  $f(y_1, y_2, \ldots, y_n)$ é fatorável  $f(y_1, y_2, \ldots, y_n) =  f(y_1) \cdot f(y_2) \cdot f(y_n)$. Desta forma, para $n=2$ isto implica que $f(y_2|y_1) = f(y_2)$
+
+Considere uma urna com uma bola branca e uma preta com probabilidade 1/2 de retirar cada uma delas. As bolas serão retiradas da urna sem reposição. Mostre que as variáveis definidas pelos resultados das retiradas são permutáveis, mas não independentes.
+
+Dica de notação: Denote a primeira bola ser branca por $Y_1 = 0$  e preta por $Y_1 = 1$. Use análogo para segunda bola.  
+
+\begin{solucao}
+São permutáveis pois 
+\[ 1/2 = P(Y_1 = 1, Y_2 = 0) = P(Y_1 = 0, Y_2 = 1) = 1/2, \]
+mas não são independentes pois
+\[0 = P(Y_2 = 1|Y_1 = 1) \neq P[Y_2 = 1] = 1/2 \]
+\end{solucao}
+    
+%%%
+%%% $1^a$ Prova (17/10/2024)
+%%%
+  
+\item  \textit{
+Em um grupo de estudantes 55\% são do curso $A$, 35\% do curso $B$ o restante do
+curso $C$. A proporção estudantes que estão fazendo a segunda graduação em cada um dos cursos é de 5, 10  e 25\%, respectivamente. 
+Se um estudante é sorteado ao acaso e verifica-se que está fazendo a segunda graduação, qual a probabilidade de
+ser de cada um dos cursos?}
+\begin{enumerate}
+\item A qual curso voce arriscaria dizer que o estudante sorteado pertence? Justifique.
+\item Resolva a problema da forma que achar adequada.
+\item Considere agora o problema do ponto de vista Bayesiano.
+  Qual é a variável resposta $(Y)$ e sua distribuição?
+  Qual é o parâmetro $(\theta)$ e sua distribuição a {\it priori}?
+ Qual a verossimilhança? E a {\it posteriori}? E a marginal (preditiva)?
+\item Esboce um gráfico da {\it priori} e da {\it posteriori}.
+\item Interprete os resultados.
+\item Agora que resolveu o problema, em qual curso ``apostaria'' que  o estudante pertence? Justifique
+\end{enumerate}
+
+\item Suponha que o tempo em minutos necessário para atender um cliente em um banco possui uma distribuição exponencial com parâmetro $\theta$.
+  Para fins de planejamento de serviços deseja-se conhecer melhor o processo, o que é feito por  inferências sobre $\theta$.
+  Baseada em conhecimento prático e subjetivo, a incerteza sobre $\theta$ é descrita por uma distribuição (\textit{a priori}) de probabilidades para os tempos de atendimento.
+  Para conhecer melhor o processo vai se coletar uma amostra registrando o tempo gasto em $n$ atendimentos.
+  \begin{enumerate}
+  \item Escreva a função de probabilidades para as observações.
+  \item Escreva a função de verossimilhança. 
+  \item Reconheça uma distribuição de probabilidades proporcional à esta expressão da verossimilhança. Qual é a distribuição e com quais valores de parâmetros? 
+  \item Forneça a expressão de uma distribuição à {\it priori} conjugada.
+  \item Qual(ais) valor(es) você especificaria para o(s) parâmetro(s) da distribuição {\it priori} conjugada (hiperparâmetros)? Justifique.
+  \item Obtenha a expressão da distribuição marginal (preditiva a priori).
+  \item Explique como faria para simular valores desta distribuição marginal.
+  \item Obtenha a expressão da posteriori e indique qual a distribuição de probabilidades.
+  \item Qual(ais) quantidade(s) calculada(s) com a amostra são necessárias para a obtenção da verossimilhança e posteriori?
+  \item O estudo foi feito em uma primeira agência e o tempo médio observado para atender 20 clientes foi de 10,5 minutos. Forneça a expressão da distribuição a posteriori para $\theta$ com estes valores.
+  \item Qual o valor esperado da distribuição a posteriori para $\theta$?
+  \item Mostre que o valor esperado da posterior é uma média ponderada entre o valor esperado da priori e do estimador de máxima verossimilhança (inverso da média dos dados). 
+  \item Qual seria a distribuição preditiva para uma nova observação após obter esta primeira amostra?
+  \item Qual o valor esperado da distribuição marginal $[Y]$?
+  \item Em uma segunda agência, o estudo foi feito com 12 clientes e o tempo médio de atendimento foi de 8,5 minutos. Qual a posteriori após considerar os dados desta segunda agência?
+  \item Após algum tempo decidiu-se por igualar os tamanhos das amostras e completou-se a amostra da segunda agência anotando-se os tempos de atendimento de mais oito clientes que totalizaram 108 minutos. Compare os resultados da primeira agência e da segunda após esta complementação da amostra.
+  \end{enumerate}
+
+  \newpage
+
+% \item Indique para cada trecho de código a seguir o modelo usado e o que está sendo obtido.
+  
+%   \begin{enumerate}
+% \item
+% <<eval = FALSE>>=
+% vec1 <- rgamma(1E5, shape = 10, rate = 3)
+% vec2 <- rexp(1E5, rate = vec1)
+% hist(vec2, freq = FALSE, nclass = 30)
+% @ 
+% % \item
+% % <<eval = FALSE>>=
+% % ## ... continuando anterior
+% % mean(vec1)
+% % 10/3
+% % @
+% \item
+% <<eval = FALSE>>=
+% vec1 <- rgamma(1E6, shape = 5, rate = 2)
+% vec2 <- rpois(1E6, lambda = vec1)
+% hist(vec1[vec2 == 5], freq = FALSE, nclass = 30)
+% @
+% \item
+% <<eval = FALSE>>=
+% curve(dbeta(x, 2, 8), ylim = c(0, 7))
+% curve(dbeta(x, 2 + 10, 8 + 30), col = 4, add = TRUE)
+% @ 
+% \item
+% <<eval = FALSE>>=
+% ## ... continuando anterior
+% vec1 <- rbeta(1E5, 2 + 10, 8 + 30)
+% vec2 <- rbinom(1E5, size = 1, prob = vec1)
+% prop.table(table(vec2))
+% @
+% \end{enumerate}
+
+\item Forneça a expressão da priori conjugada dos seguintes modelos de $[Y|\theta]$. Justifique as respostas.
+  \begin{enumerate}
+  \item ${\rm Geometrica}(\theta)$
+  \item ${\rm Gama}(a = 5, \theta)$
+  \item ${\rm Normal}(\mu = 100, \theta)$
+  \item ${\rm Weibull}(\alpha = 2, \theta)$
+  \item ${\rm Normal}(\theta, \sigma = 1)$    
+\end{enumerate}
+
+% \item Escreva de maneira suscinta (um parágrafo com no máximo 10 linhas) como voce explicaria para um pesquisador de outra área as características da análise bayesiana em contraste com outra(s) abordagem(ens) para inferência estatística.
+
+
+  %%% 
+  %%% 2022 2a prova (05/05/2022)
+  %%% 
+  
+\item Comente sobre intervalos HPD frequentemente usados em inferência
+  bayesiana em contraste com intervalos assintóticos e baseados em
+  quantis, apontando as principais características e diferenças.
+
+\item Embora prioris conjugadas tornem a computação bayesiana
+  extremamente simples, elas podem não ser apropriadas e por vezes
+  simplesmente não existem (de forma útil) para o modelo que se deseje
+  ajustar. Explique com detalhes como as análises devem ser conduzidas
+  neste caso, considerando pelo menos duas abordagens (de natureza
+  distinta).
+
+
+\item Suponha que em um experimento físico, a variação temporal de uma
+  corrente elétrica, denotada por $X$, tem distribuição uniforme no
+  intervalo $[0,\theta]$. Sendo $X_1,\cdots,X_n$ realizações aleatórias
+  desse experimento e assumindo o seguinte modelo a priori para $\theta$
+\[
+\pi(\theta) = \frac{10}{\theta^{11}}\underset{{[1,\infty)}}{ \mathbb{I}(\theta)},
+\]
+pede-se
+\begin{enumerate}
+	\item[a)] Mostre que a distribuição a posteriori de $\theta$ é dada por
+\[
+\pi(\theta|X_1,\cdots,X_n) = \frac{(n + 10 )\theta_0^{n + 10 }}{\theta^{n+11}}\underset{{[\theta_0,\infty)}}{ \mathbb{I}(\theta)},
+\]
+sendo $\theta_0 = {\rm max}\left\{X_{(n)},1\right\} $ para $X_{(n)} = {\rm max}\left\{X_1,\cdots,X_n\right\}$.
+	\item[b)] Obtenha o estimador de Bayes sob perda $0-1$ de $\theta$.\\
+	{\it {\bf Dica}: Qual o valor de $\theta$ que fornece o maior valor de $\pi(\theta|X_1,\cdots,X_n)$?}
+
+	\item[c)] Obtenha o intervalo HPD com $90\%$ de credibilidade de $\theta$.\\
+	{\it {\bf Dica}: Note que $\pi(\theta|X_1,\cdots,X_n)$ é unimodal e decrescente em $\theta$.}
+\end{enumerate}
+
+
+\begin{solucao}
+
+ {\it Solução}:
+
+-- {\bf item a)} Temos
+\[
+\begin{split}
+\pi(\theta|X_1,\cdots,X_n) & \propto \left[ \prod_{i=1}^{n} \frac{1}{\theta} \underset{{[0,\theta)}}{ \mathbb{I}(x_i)}\right] \frac{1}{\theta^{11}}\underset{{[1,\infty)}}{ \mathbb{I}(\theta)}\\
+& = \frac{1}{\theta^{n + 11}}  \prod_{i=1}^{n} \underset{{[0,\theta)}}{ \mathbb{I}(x_i)} \underset{{[1,\infty)}}{ \mathbb{I}(\theta)}.
+\end{split}
+\]
+Note que todos os $X_i$'s são menores que $\theta$. Em particular, o valor máximo dos $X_i$'s é menor do que $\theta$. Isso sugere que, condicional a $X_{(n)}$, os demais $X_i$'s não trazem informação sobre $\theta$. Portanto
+\[
+\pi(\theta|X_1,\cdots,X_n)  \propto \frac{1}{\theta^{n + 11}}   \underset{{[x_{(n)},\infty)}}{ \mathbb{I}(\theta)}   \underset{{[1,\infty)}}{ \mathbb{I}(\theta)}.
+\]
+De modo que
+\[
+\underset{{[x_{(n)},\infty)}}{ \mathbb{I}(\theta)}   \underset{{[1,\infty)}}{ \mathbb{I}(\theta)} \left\{\begin{array}{l}
+	1,\;\mbox{se $\theta \geq \theta_0$}\\
+	0,\;\mbox{caso contrário.}
+\end{array} \right.
+\]
+Portanto
+\[
+\pi(\theta|X_1,\cdots,X_n)  \propto \frac{1}{\theta^{n + 11}} \underset{{[\theta_0,\infty)}}{ \mathbb{I}(\theta)}.
+\]
+Agora precisamos calcular a constante $c$ tal que
+$$\int_{-\infty}^{\infty} c\; \frac{1}{\theta^{n + 11}} \underset{{[\theta_0,\infty)}}{ \mathbb{I}(\theta)} d\theta = 1$$.
+Resolvendo essa desigualdade, temos $c = (10 + n)\theta_0^{10 + n}$. Conclui-se assim, que
+\[
+\pi(\theta|X_1,\cdots,X_n) = \frac{(n + 10 )\theta_0^{n + 10 }}{\theta^{n + 11}}\underset{{[\theta_0,\infty)}}{ \mathbb{I}(\theta)}.
+\]
+
+-- {\bf item b)} A função densidade $\pi(\theta|X_1,\cdots,X_n)$ é contínua e decrescente em $\theta$, portanto o estimador de Bayes sob perda $0-1$ é $\theta_0$.
+
+
+-- {\bf item c)} Como a função densidade $\pi(\theta|X_1,\cdots,X_n)$ é contínua e decrescente em $\theta$, o intervalo HPD para $\theta$ é da forma $[\theta_0,a]$, onde $a$ é o quantil que deixa uma área de $10\%$ a direita. Assim, precisamos encontrar o valor $a$ que satisfaz:
+\[
+\int_{a}^{\infty} \frac{(n + 10 )\theta_0^{n + 10 }}{\theta^{n + 11}} d\theta = 0,1.
+\]
+Segue que
+\[
+\begin{split}
+	\int_{a}^{\infty} \frac{(n + 10 )\theta_0^{n + 10 }}{\theta^{n + 11}} d\theta &= \left.(n + 10 )\theta_0^{n + 10 } \frac{\theta^{-(n + 11)+ 1}}{-(n + 11)+ 1}\right|_{\theta=a}^{\theta=\infty}= (n + 10 )\theta_0^{n + 10 } \frac{a^{-(n + 10)}}{n + 10} = 0,1\;\; (\Leftrightarrow)\\
+	a^{(n + 10)} &= 10\theta_0^{(n + 10)} \;\;\hspace{10cm} (\Leftrightarrow)\\
+	a &= 10^{1/(n + 10)} \theta_0.
+\end{split}
+\]
+Portanto, o intervalo HPD com $90\%$ de credibilidade de $\theta$ é dado por $[\theta_0\,,\,10^{1/(n + 10)} \theta_0]$
+
+\end{solucao}
+
+\item Seja $X_1, \ldots, X_n$ uma amostra aleatória de uma distribuição com função de probabilidades:
+\[ f(x|\theta) = \theta \exp\{-\theta x\},\;\mbox{ com  } x > 0\mbox{  e  } \theta > 0.  \]
+Suponha o modelo a priori de Jeffreys para $\theta$ (ou seja, $\pi (\theta) \propto 1/\theta,\,\theta > 0$). Com isso, considere o teste de hipóteses: ${\rm H_0}: \theta \leq 1$ vs ${\rm H_1}: \theta > 1$.
+\begin{enumerate}
+\item Obtenha o modelo a posteriori de $\theta$, e expresse o
+  estimador de Bayes sob perda quadrática para $\theta$.
+\item Supondo $\sum_{i=1}^{n} x_i = 1,5$, decida sobre ${\rm H_0}$ contra ${\rm H_1}$ considerando a seguinte estrutura de perda
+  \begin{table}[!htb]
+    \centering
+    \begin{tabular}{c|cc}
+      \hline
+      \multirow{2}{*}{$L(\theta, a)$}& \multicolumn{2}{c}{Decisão} \\
+                                     & $\theta \leq 1$ & $\theta > 1$ \\
+      \hline
+      $\theta \leq 1$& 0 & $1$ \\
+      $\theta > 1$& $ 1 $& 0 \\
+      \hline
+    \end{tabular}
+  \end{table}
+
+  Considere $n=10$ e expresse os comandos em R para obter a resposta.
+
+  % \item Repita o item anterior usando fator de Bayes, e expresse os comandos em R para obter a resposta.
+
+\end{enumerate}
+
+\item Em algoritmos de MCMC, para se verificar se as cadeias
+  atingiram a distribuição estacionária (convergência), é útil
+  verificar se as diferentes cadeias já se misturaram a ponto de se
+  tornarem indistinguíveis. Para isso é necessário dispor de
+  múltiplas cadeias e utilizar pontos de partida bastante dispersos.
+  O teste de Gelman-Rubin calcula a estatística $\hat{R}$
+  (\texttt{Rhat}), definida como
+  $$
+  \hat{R} = \frac{S}{W}
+  $$
+  sendo $S$ o desvio padrão calculado a partir da mistura de todas as
+  cadeias, e $W$ a média dos desvios padrão das cadeias indivíduais.
+  Valores de $\hat{R}$ muito maiores do que 1 são indicação de que ainda
+  não houve convergência. A medida que as cadeias evoluem, o valor de
+  $\hat{R}$, tende a se aproximar de 1. Como regra geral, considera-se
+  aceitável valores $\hat{R} < 1.05$. Outra questão pertinente é saber
+  se a informação contida na amostra simulada é suficiente. Ou seja,
+  desejamos saber se o tamanho $n_s$ da amostra simulada da distribuição
+  posterior de fato tem a acurácia de uma amostra de $n$ elementos
+  independentes. Essa questão se justifica pelo fato de que os valores
+  gerados nas cadeias tendem a apresentar autocorrelação. Uma forma de
+  verificar esse fato se dá por meio do cálculo do número efetivo de
+  amostras (\texttt{n.eff})
+  $$
+  n_{eff} = \frac{1}{1 + 2 \sum_{i=1}^{\infty} \rho_k}
+  $$
+  onde $\rho_k$ são as correlações para o espaçamento de $k$ passos na
+  cadeia. Quanto mais próximo $n_{eff}$ estiver de $n$, melhor.
+
+  O resultado abaixo é o resumo da distribuição posterior para o
+  parâmetro $\theta$ de uma distribuição Binomial com $n = 3000$, obtido
+  via JAGS
+\begin{verbatim}
+          mean    sd  2.5%   50% 97.5% [...]  Rhat n.eff
+theta    0.163 0.136 0.006 0.129 0.508 [...] 1.12    752
+\end{verbatim}
+  Com esse resultado, comente sobre os valores obtidos de \texttt{Rhat}
+  e \texttt{n.eff}, e o que deveria ser feito para que esses valores
+  fiquem mais adequados.
+
+
+
+
+\item Descreva o modelo sendo ajustado, distribuições envolvidas, parâmetros e constantes.
+  Esboce ainda a estrutura dos dados nas seguintes declarações de modelos em JAGS.
+
+  \begin{enumerate}
+  \item
+\begin{verbatim}
+model{
+  for (i in 1:N){
+    x[i] ~ dbern(p)
+  }
+  p ~ dbeta(alpha, beta)
+  alpha <- 1
+  beta <- 1
+}
+\end{verbatim}
+
+  \item
+\begin{verbatim}
+model{
+  for(i in 1:M){
+     for(j in 1:N){
+        y[i,j] ~ dnorm(mu[i], tau)
+     }
+     mu[i] ~ dnorm(theta, tauD)
+  }
+  tau <- pow(sigma, -2)
+  sigma ~ dunif(0, 100)
+  theta ~ dnorm(0, .001)
+  tauD <- pow(delta, -2)
+  delta ~ dunif(0, 100)
+}
+\end{verbatim}
+
+
+  \item
+\begin{verbatim}
+model{
+  for (i in 1:N){
+    y[i] ~ dbern(p[i])
+    logit(p[i]) <- a[g[i]] * x[i]
+  }
+  for (j in 1:K){
+    a[j] ~ dnorm(mu.a, tau.a)
+  }
+  mu.a ~ dnorm(0, 0.0001)
+  tau.a <- pow(sigma.a, -2)
+  sigma.a ~ dunif(0, 1000)
+}
+\end{verbatim}
+
+  \item
+\begin{verbatim}
+model{
+  for (i in 1:N){
+    y[i] ~ dnorm(mu[i], tau)
+    mu[i] <- a[g[i]] * x[i] + b[g[i]]
+  }
+  for (j in 1:K){
+    a[j] ~ dnorm(mu.a, tau.a)
+    b[j] ~ dnorm(mu.b, tau.b)
+  }
+  mu.a ~ dnorm(0, 0.0001)
+  mu.b ~ dnorm(0, 0.0001)
+  tau <- pow(sigma, -2)
+  sigma ~ dunif(0, 1000)
+  tau.a <- pow(sigma.a, -2)
+  tau.b <- pow(sigma.b, -2)
+  sigma.a ~ dunif(0, 1000)
+  sigma.b ~ dunif(0, 1000)
+}
+\end{verbatim}
+
+  \item
+\begin{verbatim}
+model{
+  for (t in 1:T) {
+    y[t] ~ dbeta(a[t], b[t])
+    a[t] <- mu[t] * phi
+    b[t] <- (1 - mu[t]) * phi
+    logit(mu[t]) <- alpha + beta * x[t]
+  }
+  alpha ~ dnorm(0, 10^-2)
+  beta ~ dnorm(0, 10^-2)
+  phi ~ dunif(0, 10)
+}
+
+\end{verbatim}
+
+  \item
+\begin{verbatim}
+model
+{
+  for (i in 1:T) {
+    y[i] ~ dbin(p[i], K)
+    logit(p[i]) <- alpha + beta_1 * x_1[i] + beta_2 * x_2[i]
+  }
+  alpha ~ dnorm(0.0,0.01)
+  beta_1 ~ dnorm(0.0,0.01)
+  beta_2 ~ dnorm(0.0,0.01)
+}
+\end{verbatim}
+
+  \item
+\begin{verbatim}
+model{
+  for(i in 1:n){
+      y[i] ~ dpois(mu[i])
+      mu[i] <- ifelse(i > k, lambda, theta)
+  }
+  k ~ dcat(ano[]) # distribuição para dados categóricos ou discretos
+  theta ~ dgamma(a1, b1)
+  lambda ~ dgamma(a2, b2)
+  dif <- lambda - theta
+  ib1 ~ dgamma(c1, d1)
+  b1 <- 1/ib1
+  ib2 ~ dgamma(c2, d2)
+  b2 <- 1/ib2
+  a1 <- 0.5
+  a2 <- 0.5
+  c1 <- 0.1
+  c2 <- 0.1
+  d1 <- 1
+  d2 <- 1
+}
+\end{verbatim}
+
+  \end{enumerate}
+
+  %%%
+  %%% 2022 1a prova (17/03/2022)
+  %%%
+
+\item{ Com base no que você viu no curso até agora, responda:
+    \begin{enumerate}
+    \item Usando apenas palavras, como você explicaria para um leigo o
+      que é inferência bayesiana?
+    \item Usando notação estatística, como você explicaria para um
+      estatístico (mas que não sabe ainda) o que é inferência bayesiana?
+    \item Quais são as principais diferenças entre a inferência clássica
+      (frequentista e por verossimilhança) e a inferência bayesiana?
+      (Por exemplo, para cada uma: qual é o objeto de inferência? Quais
+      as suposições feitas sob os parâmetros? Como os dados são
+      tratados? Como as informações prévias podem ser consideradas?)
+    \item O que você julga serem os pontos fortes e fracos da inferência
+      bayesiana?
+    \end{enumerate}
+  }
+
+
+% \item Seja $y_1, \ldots, y_n$ uma amostra aleatória de uma distribuição com função probabilidades:
+% \[ f(y|\theta) = \theta \exp\{-\theta y\} \]
+% Obtenha a priori de Jeffreys,
+% a expressão da posteriori, da marginal e da distribuição preditiva.
+
+
+% \item No contexto do problema anterior imagine que está se medindo o tempo para atender clientes em um banco.
+%   Forneça as expressões caso seja assumida como priori uma distribuição gama de média 0,25 e desvio padrão 1.
+%   Além disto considere que foi observada uma amostra aleatória de 20 tempos de atendimento e o tempo médio dos dados
+%   desta amostra foi de 4,8 minutos.
+
+% \item Forneça os comandos para desenhar em um gráfico as curvas da priori, verossimilhança e posteriori do item anterior.
+
+%%
+%% 2019 Prova 1
+%%
+\item Decidiu-se examinar um conjunto de imagens médicas tomadas independentemente
+  de diferentes indivíduos. O objetivo é fazer inferências sobre a proporção de imagens 
+  com determinada característica morfológica.
+  Em particular deseja-se avaliar se a proporção de indivíduos com alteração está
+  abaixo de 40\%.
+\begin{itemize}
+  \item Em um primeiro estudo tomaram-se 9 imagens sendo detectadas 3 com alteração.
+  \item Em um segundo estudo decidiu-se tomar-se imagens até que se obtivesse 3 com
+    alteração. Ocorreu que foram tomadas 9 imagens no total.
+\end{itemize}
+\begin{enumerate}
+\item  Como seria testada a hipótese de interesse em cada estudo no enfoque não Bayesiano?
+\item Neste caso os dois estudos forneceriam a mesma conclusão estatística?
+\item Em uma análise Bayesiana com uma priori $[\theta] \sim {\rm Be}(1,5 ; 1,5)$,
+  qual seria a posteriori em cada estudo? 
+\item Como deveria ser avaliada a posteriori para concluir sobre a hipótese de interesese?
+  Os estudos produziriam a mesma conclusão estatística? Justifique.
+\item Se alternativamente decide-se adotar a priori de Jeffreys em cada estudo, 
+  elas seriam as mesmas a produziram a mesma posteriori? Justifique. 
+\end{enumerate}
+
+
+\item Uma empresa adquire 30\% de sua matéria prima de um primeiro fornecedor, 50\% de um segundo e o restante de um terceiro fornecedor.
+Os lotes de matéria prima são inspecionados e, se considerados não satisfatórios, são enviados de volta.
+Sabe-se que 2\%, 5\% e 1\% dos lotes são retornados a cada fornecedor, respectivamente.
+Rejeitando-se um lote, deseja-se quantificar a chance de ter vindo de cada um dos fornecedores.
+\begin{enumerate}
+\item Resolva a problema da forma que achar adequada.
+\item Considere agora o problema do ponto de vista Bayesiano.
+  Qual é a variável resposta $(Y)$ e sua distribuição?
+  Qual é o parâmetro $(\theta)$ e sua distribuição a {\it priori}?
+ Qual a verossimilhança? E a {\it posteriori}?
+\item Esboce um gráfico da {\it priori} e da {\it posteriori}.
+\end{enumerate}
+
+<<include = FALSE>>=
+prior <- c(I=0.30, II=0.50, III=0.20)
+lik <- c(rI = 0.02, rII=0.05, rIII=0.01)
+marg <- sum(prior*lik)
+post <- (prior*lik)/marg
+plot((1:3)+0.1, post, type="h", ylim=c(0, 1), xlim=c(0.8, 3.2),
+     xlab=expression(theta), ylab=expression(paste("P",group("[",theta,"]"))))
+segments((1:3)-0.1, 0, (1:3)-0.1, prior, col=2)
+legend("topright", c("priori", "posteriori"), lty=1, col=2:1)
+@ 
+
+
+
+\item Seja $x_1, \ldots x_n$ uma a.a. de uma distribuição normal de média $\mu$ conhecida
+e variância $\sigma^2$ desconhecida. 
+\begin{enumerate}
+\item Obtenha a expressão da verossimilhança do modelo.
+\item Obtenha a priori de Jeffreys.
+\item Obtenha a expressão da distribuição a posteriori.
+\item É possível identificar a posteriori do modelo como alguma distribuição conhecida? Qual?
+\item Considere que foi tomada a amostra dada pelos valores a seguir, e que $\mu = 10$. Obtenha a expressão
+da posteriori.
+\[ 12,1 \;\;;\;\; 8,7 \;\;;\;\; 11,3 \;\;;\;\; 9,2 \;\;;\;\; 10,5 \;\;;\;\; 9,7 \;\;;\;\; 11,6\]
+%\item Indique (com comandos do R ou de alguma outra forma) como resumos pontuais e intervalares desta distribuição a posteriori poderiam ser obtidos para fins de inferência
+\end{enumerate}
+
+%%
+%% 2019 Prova 2
+%%
+
+\item Vimos em aula o exemplo de taxas bayesianas baseadas na distribuição de Poisson.
+  Vamos agora considerar um exemplo semelhante, porém com a distribuição Binomial.
+  Considere que temos uma amostra de $N$ grupos, cada um com $n_i$ indivíduos
+  onde conta-se o número $y_i$ com determinada característica.
+  Como contexto ilustrativo considere que registra-se o números de aprovados
+  em diferentes turmas de uma disciplina.
+\begin{enumerate}
+  \item Escreva o modelo, adotando a priori conjugada. Explique cada termo e identifique o parâmetro de interesse. 
+  \item Obtenha a posteriori.
+  \item A distribuição posteriori é a inferência completa sobre o parâmetro. Entretanto se for necessário um relato resumindo a informação final (posteriori) em um único valor qual(quais) seriam as opções?
+  \item Caso desejar-se reportar a posteriori por um intervalo de valores, como seriam obtidos os limites de tal intervalo? Forneça ao menos duas maneiras explicando a forma de obtenção e comentando a diferença entre elas. Explique ainda por que este intervalo \textbf{não} é chamado de \textit{intervalo de confiança}.
+  \item Explique como obter (segundo a análise bayesiana) a predição do número de 
+    aprovados para uma novo grupo com $n_p$ indivíduos. 
+  \item Explique como o procedimento bayesiano empírico seria efetivado neste caso.
+\end{enumerate}
+  
+<<include = FALSE, eval = FALSE>>=
+a0 <- 5
+b0 <- 5
+n <- c(50,23,18,29,35,42)
+Y <- c(42,16,15,22,31,34)
+(nY <- cbind(n, Y))
+rm(n,Y)
+sny <- colSums(ny)
+(th.i <- Y/n)
+
+curve(dbeta(x, a0+sny[2], b0+sny[1]-sny[2]), from=0, to=1, n=2000)
+curve(dbeta(x, sny[2], sny[1]-sny[2]), from=0, to=1, col=4, add=T, n=2000)
+curve(dbeta(x, a0, b0), from=0, to=1, col=2, add=T, n=2000)
+
+dpred <- function(yp, np, sn, sy, a, b, log=FALSE){
+    ## np : n para predição
+    ## sy : \sum y_i , sn : \sum n_i
+    ## a, b : hiperparâmetros
+    a1 <- a+sy
+    b1 <- b+sn-sy
+    res <- lchoose(np, yp) - lbeta(a1,b1)  + lbeta(yp+a1,np-yp+b1)
+    if(log) return(res)
+    else return(exp(res))
+}
+dpred(25, np=30, sn = sny[1], sy=sny[2], a=a0, b=b0)
+dpred(25:30, np=30, sn = sny[1], sy=sny[2], a=a0, b=b0)
+sum(dpred(0:30, np=30, sn = sny[1], sy=sny[2], a=a0, b=b0))
+plot(0:30, dpred(0:30, np=30, sn = sny[1], sy=sny[2], a=a0, b=b0), ty="h")
+## conferir após as mudnacas na verossimilhança marginal, mas acho que está correto
+
+## bayes empírico com estimação por momentos
+hp.mom <- function(dados, weighted = TRUE){
+    ## dados é matrix Nx2  
+    th.i <- dados[,2]/dados[,1]
+    if(!weighted){
+        mth <- mean(th.i)
+        vth <- var(th.i)
+    }
+    else{
+        mth <- sum(dados[,2])/sum(dados[,1])
+        vth <- (sum(dados[,1]*(th.i - mth)^2)/sum(dados[,1])) #- mth/mean(dados[,1])
+    }
+    a <- (((1-mth)*mth^2)/vth) - mth
+    b <- a*(1-mth)/mth
+    return(c(a,b))
+}
+(emp.mw <- hp.mom(ny))
+(emp.m <- hp.mom(ny, weighted=FALSE))
+curve(dbeta(x, emp.m[1]+sny[2], emp.m[2]+sny[1]-sny[2]), from=0, to=1, n=2000)
+curve(dbeta(x, sny[2], sny[1]-sny[2]), from=0, to=1, col=4, add=T, n=2000)
+curve(dbeta(x, emp.mw[1], emp.mw[2]), from=0, to=1, add=T, col=2, n=2000)
+curve(dbeta(x, emp.m[1], emp.m[2]), from=0, to=1, add=T, col=3, n=2000)
+
+## bayes empírico com estimação por MV
+hp.v <- function(par, data){
+    ## data é uma matrix Nx2 com colunas ni e yi
+    a <- exp(par[1])    
+    b <- exp(par[2])    
+    fBeta <- function(niyi, a, b){
+        print(niyi)
+        lchoose(niyi[1], niyi[2]) + lbeta(a+niyi[2], b+niyi[1]-niyi[2])
+    }
+    res <- apply(data, 1, fBeta, a=a, b=b) - lbeta(a,b)
+    print(res)
+    ##    fBeta <- function(niyi, a, b){
+    ##        lbeta(a+niyi[2], b+niyi[1]-niyi[2]) - lbeta(a,b)
+    ##    }
+    ##    res <- apply(data, 1, fBeta, a=a, b=b)
+#    integra <- function(theta, a, b, niyi) {
+#        niyiu <- drop(niyi)
+#        out <- dbinom(x = niyi[2], size = niyi[1], prob = theta)*
+#            dbeta(x = theta, shape1 = a, shape2 = b)
+#        return(out)
+#    }
+#    ll <- c()
+#    for(i in 1:nrow(data)) {
+#        ll[i] <- integrate(integra, lower = 0, upper = 1,
+#                           a = a, b = a, niyi=data[i,,drop=TRUE])$value
+#    }
+#    out <- log(ll)
+#    print(out)
+##    print(out-res)
+    ##    return(-sum(out))
+    return(-sum(res))
+}
+
+ini <- c(15, 5)
+hp.v(log(ini), nY)
+
+#debug(hp.v)
+#hp.v(log(ini), nY)
+
+emp.v <- optim(ini, fn=hp.v, data=nY)
+#               method="L-BFGS-B", lower=c(0,0))
+emp.v$par
+exp(emp.v$par)
+emp.m
+
+nysim <- ny
+nysim[,2] <- rbinom(6, size=ny[,1], prob=rbeta(6, 15, 5))
+est <- optim(ini, fn=hp.v, data=nysim)
+(est$par)  
+exp(est$par)  
+ab.mv <- exp(est$par)  
+
+## wbonat
+#n <- c(50,23,18,29,35,42)
+#Y <- c(42,16,15,22,31,34)
+#a = 1
+#b = 1
+#theta = 0.3
+integrando <- function(theta, pars, niyi) {
+    out <- dbinom(x = niyi[2], size = niyi[1], prob = theta)*
+        dbeta(x = theta, shape1 = pars[1], shape2 = pars[2])
+    return(out)
+}
+#for(i in 1:6) {
+#    curve(integrando(x, a = 1, b = 1, Y = Y[i], n = n[i]), 0,1, 
+#          add = TRUE, ylim = c(0,0.5))
+#}
+LL <- function(par, dados) {
+    ll <- c()
+    for(i in 1:nrow(dados)) {
+        ll[i] <- integrate(integrando, lower = 0, upper = 1,
+                           pars=par, niyi = drop(dados[i,]))$value
+    }
+##    print(log(ll))
+    out <- -sum(log(ll))
+    return(out)
+}
+
+
+ini=c(15, 5)
+LL(ini, dados = nY)
+hp.v(log(ini), nY)
+
+result <- optim(par = ini, fn = LL, dados=nY)
+result
+log(result$par)
+curve(dbeta(x, shape1 = result$par[1], shape2 = result$par[2]), 0.7, 0.9, add=T)
+@ 
+
+\item Descreva o modelo sendo ajustado e a estrutura dos dados que seria necessária nas seguintes declarações de modelos em JAGS.
+
+\begin{enumerate}
+
+\item 
+\begin{verbatim}
+model{
+  for (i in 1:N){
+    x[i] ~ dbern(p)
+  }
+  p ~ dbeta(alpha, beta)
+  alpha <- 1
+  beta <- 1
+}
+\end{verbatim}
+
+\item
+\begin{verbatim}
+model{
+  for(i in 1:M){
+     for(j in 1:N){
+        y[i,j] ~ dnorm(mu[i], tau)
+     }
+     mu[i] ~ dnorm(theta, tauD)
+  }
+  tau <- pow(sigma, -2)
+  sigma ~ dunif(0, 100)
+  theta ~ dnorm(0, .001)
+  tauD <- pow(delta, -2)
+  delta ~ dunif(0, 100)
+}
+\end{verbatim}
+
+\item
+\begin{verbatim}
+model{
+for(i in 1:n){
+    Y[i] ~ dpois(mu[i])
+    mu[i] <- N[i] * lambda
+   }
+   lambda ~ dgamma(a, beta)
+   tau ~ dgamma(c, d)
+   beta <- 1/tau
+   a <- 1.2
+   c <- 1.5
+   d <- 2
+}
+\end{verbatim}
+
+\item
+\begin{verbatim}
+model{
+for(i in 1:n){
+    Y[i] ~ dbern(q[i])
+    logit(q[i]) <- beta[1] + beta[2]*X[i,1] + beta[3]*X[i,2] 
+   }
+   for(j in 1:3){
+    beta[j] ~ dnorm(0,0.1)
+   }
+}
+\end{verbatim}
+
+\end{enumerate} 
+
+%%
+%% 2019 Prova Final
+%%
+
+
+\item Considere o problema de uma regressão linear simples usual com o regressor $x$ e a variável resposta $Y$.
+Deseja-se implementar um algorítmo para análise bayesiana deste modelo.
+Descreva os passos que seriam necessários e
+obtenha as expressões relevantes para implementação do algorítmo. 
+Inclua no algoritmo a possibilidade de predição.
+Faça escolhas quando necessário como, por exemplo, de priori.
+
+\item Considere o seguinte problema: \\
+\paragraph{\bf Exemplo (aproveitamento de saques em jogos de tênis)}
+%\footnote{Retirado de \textsl{http://www.stat.duke.edu/~st118/sta250/laplace.pdf}}
+{\it Considere dados 
+(iid) $y = (y_1, \ldots , y_n)$ das taxas de sucesso
+no primeiro saque de um jogador de tênis em $n$ jogos de um campeonato.
+Assuma o modelo $[Y|\theta] \sim f(y_i|\theta) = \theta (\theta+1) y_i^{\theta-1} (1-y_i)$
+com $y_i \in (0,1)$ e $\theta > 0$. Não existe uma família conjugada usual para este modelo
+e adota-se uma priori gama $[\theta] \sim {\rm G}(1,1)$.}
+Foram obtidos dados tal que $n=20$, $\sum_i \log (y_i) = -4,59$. 
+Obtenha a expressão da posteriori e discuta como obter inferências 
+(bayesianas) de interesse, incluindo resumos da posteriori 
+e preditivas.
+Discuta e explique procedimentos e passos adotados  
+em situações em que não há expressões analíticas (fechadas).
+
+\begin{solucao}
+<<>>=
+dfy <- function(y, theta, log=FALSE){
+  if(theta<0) stop("valor inválido de theta") 
+  res <- log(theta) + log(theta+1) + (theta-1)*log(y)+log(1-y)
+  if(log) return(res) else return(exp(res))
+  }
+curve(dfy(x, theta=0.8), from=0, to=1)
+curve(dfy(x, theta=1.2), from=0, to=1, add=T)
+curve(dfy(x, theta=2), from=0, to=1, add=T)
+curve(dfy(x, theta=5), from=0, to=1, add=T)
+
+lik <- function(theta, n, sly,  log=FALSE, integra=FALSE){
+  if(any(theta<0)) stop("valor inválido de theta") 
+  res <- n*log(theta) + n*log(theta+1) + theta*sly # sum(log(1-y)-log(y))
+  if(log) return(res) else return(exp(res))
+  }
+
+
+curve(lik(x, n=20, sly=-4.59), from=3, to=15)
+(mle <- optimize(lik, interval=c(0, 20), maximum=TRUE, n=20, sly=-4.59)$max)
+curve(dfy(x, theta=mle), from=0, to=1)
+@ 
+\end{solucao}
+
+%%
+%% 2018 Prova 1
+%%
+\item Seja $y_1, \ldots, y_n$ uma amostra aleatória de uma distribuição com função probabilidades:
+\[ f(y|\theta) = \frac{{\rm e}^{-\theta}\theta^y}{y!} \; ; \;\; y=0,1,\ldots \]
+e assume-se como distribuição a priori 
+\[ f(\theta) = {\rm e}^{-\theta} \; ; \;\; 0 < \theta . \]
+Obtenha a expressão da posteriori e da distribuição preditiva.
+
+\begin{solucao}
+  
+  Obtenção da expressão da posteriori:
+  \begin{align*} 
+    f(y_i|\theta) &= \frac{{\rm e}^{-\theta}\theta^y_i}{y_i!} \\
+    L(y|\theta) &= \frac{{\rm e}^{-n \theta}\theta^{\sum_i y_i}}{\prod_i y!} \\    
+    f(\theta|y) &\propto f(\theta)  \cdot L(y|\theta) \\
+                 &= {\rm e}^{-\theta} \frac{{\rm e}^{-n \theta}\theta^{\sum_i y_i}}{\prod_i y!} \\   
+                 &\propto {\rm e}^{-(n+1) \theta} \theta^{\sum_i y_i}\\
+              \theta|y &= {\rm Ga}(1+\sum_i y_i ; 1/(n+1))   
+  \end{align*}
+  Obtenção da expressão da preditiva:
+  \begin{align*} 
+  f(y_0|y) &= \int f(y_0|\theta, y) f(\theta|y) {\rm d}\theta = \int f(y_0|\theta) f(\theta|y) {\rm d}\theta \\
+  &= \int \frac{{\rm e}^{-\theta}\theta^y_0}{y_0!} \frac{\theta^{\sum_i y_i} {\rm e}^{-(n+1)\theta}}{\Gamma(1 + \sum_i y_i) (1/(n+1)^{1 + \sum_i y_i})} {\rm d}\theta \\
+  &= \frac{(n+1)^{1 + \sum_i y_i}}{y_0! \Gamma(1 + \sum_i y_i)} \int \theta^{y_0 + \sum_i y_i} {\rm e}^{-(n+2)\theta} {\rm d}\theta 
+  \end{align*}
+  
+<<>>=
+dados <- list(S=32, n=8)
+
+dpred <- Vectorize(function(y, data, log=FALSE){
+    res <- with(data, -lgamma(S+1) + (S+1)*log(n+1) - (y+1)*log(n+2))
+    return(ifelse(log, res, exp(res)))
+    }, "y")
+dpred(0:10, data=dados)
+plot(0:100, sapply(0:100, dpred, data=dados))
+@ 
+\end{solucao}
+
+% \item Suponha que $Y$ tenha uma distribuição de Pareto ${\rm Pa}(a, b)$, em que $a$
+% é conhecido mas $b$ é desconhecido. Desta forma,
+% \[ f(y|b) = b a^b y^{-b-1} \; ; \;\; (y > a). \]
+% Encontre a priori de Jeffreys e a correspondente distribuição posteriori para $b$ e a expressão da posteriori.
+% Explique como poderiam ser obtidos resumos (média, mediana, quantis, intervalos) da distribuição posteriori neste caso.
+
+\item A distribuição de falhas ao longo do comprimento de uma fibra artificial segue um processo de Poisson, 
+  de modo que o número de falhas de um comprimento $l$ da fibra é ${\rm Po}(l\theta)$. 
+  Pouco se sabe sobre $\theta$. 
+  O número de falhas obtidos em 5 de fibras de comprimentos de 10, 15, 25, 30 e 40 metros, respectivamente, foram de 3, 2, 7, 6 e 10. 
+  Encontre a distribuição preditiva para o número de falhas em outra fibra com 60 metros de comprimento.
+  Explique os passos que seriam executados para obter amostras e resumos da preditiva por simulação estocástica.
+
+\begin{solucao}
+  % \begin{align*} 
+  A distribuição de probabilidade para a variável observável $Y$ é:
+  \[    f(y_i|\theta) = \frac{{\rm e}^{-L_i \theta}(L_i \theta)^y_i}{y_i!} \]
+  % \end{align*}
+  A priori conjugada neste caso é uma distribuição Gama.
+  \[ f(\theta|p, q) = \frac{q^p}{\Gamma(p)} \theta^{p-1} {\rm e}^{-q \theta} \] 
+  Obtenção da expressão da posteriori:
+  \begin{align*} 
+    L(y|\theta) &= \frac{{\rm e}^{-\theta \sum_i L_i } \prod_i (N_i^{y_i}) \theta^{\sum_i y_i}}{\prod_i y!} \\    
+    f(\theta|y) &\propto f(\theta)  \cdot L(y|\theta) \\
+                &\propto \theta^{p+(\sum_i y_i) -1} {\rm e}^{- (q+\sum_i L_i)\theta} \\   
+    \theta|y &\sim {\rm Ga}(p+\sum_i y_i ; q+\sum_i L_i )   
+  \end{align*}
+  Obtenção da expressão da preditiva:
+  % \begin{align*} 
+  %   f(y_0|y) &= \int f(y_0|\theta, y) f(\theta|y) {\rm d}\theta \stackrel{ind. cond.}{=} \int f(y_0|\theta) f(\theta|y) {\rm d}\theta \\
+  %                &= \int  \frac{{\rm e}^{-L_0 \theta}(L_0 \theta)^y_i}{y_0!} \frac{\theta^{\sum_i y_i} {\rm e}^{-(n+1)\theta}}{\Gamma(1 + \sum_i y_i) (1/(n+1)%^{1 + \sum_i y_i})} {\rm d}\theta \\
+  %                &= \frac{(n+1)^{1 + \sum_i y_i}}{y_0! \Gamma(1 + \sum_i y_i)} \int \theta^{y_0 + \sum_i y_i} {\rm e}^{-(n+2)\theta} {\rm d}\theta 
+  %              \end{align*}
+\end{solucao}   
+
+%% 
+%% 2018 Prova 2
+%% 
+
+\item O número de defeitos em um rolo de 1200 metros de uma fita magnética possui distribuição 
+  Poisson($\theta$). A distribuição priori para $\theta$ é Gama($3;1$). 
+  Quando cinco rolos deste tipo são selecionados ao acaso, o número de defeitos encontrados em cada um deles é: 2, 2, 6, 0 e 3, respectivamente. 
+  Determine a distribuição a posteriori de $\theta$.
+  
+% \item Seja $y_1, \ldots, y_n$ uma amostra aleatória de uma distribuição com função probabilidades:
+%   \[ f(y|\theta) = \theta \exp\{-\theta y\} \]
+%   Obtenha a priori de Jeffreys, 
+%   a expressão da posteriori e da distribuição preditiva.
+  
+\item Considere o problema de uma regressão linear simples usual com o regressor $x$ e a variável resposta $Y$.
+  Deseja-se implementar um algorítmo para análise bayesiana deste modelo.
+  Descreva os passos que seriam necessários e
+  obtenha as expressões relevantes para implementação do algorítmo. 
+  Inclua no algoritmo a possibilidade de predição.
+  Faça escolhas qdo necessário como, por exemplo, de priori.
+  
+%% 
+%% 2018 Prova 3
+%% 
+
+  
+\item Foi visto no curso e em provas anteriores que para o modelo (verossimilhança) Poisson
+  a priori conjugada é uma distribuição Gama.
+  Entretanto pode-se pensar em outras prioris tal como uma log-normal, 
+  ou seja, um modelo com $Y \sim {\rm P}(\lambda)$ e $\log(\lambda) \sim {\rm N}(a, b)$.
+  É possível obter uma posteriori em forma fechada e conhecida neste caso?
+  Qual a expressão da posteriori (se necessário a uma constante de proporcionalidade).
+  Se voce tivesse dados de contagem para analisar sob o paradigma Bayesiano com este modelo,
+  como procederia? Qual ou quais procedimentos adotaria para obter inferências à posteriori?
+  
+\item Encontre a priori de Jeffreys para $\theta$ no modelo geométrico:
+  \[ f(x|\theta) = (1-\theta)^{x-1} \theta \; ; \;\; x=1, 2, \ldots  \]
+  para uma amostra $x_1, \ldots, x_n$.
+  Obtenha as expressões da posteriori e da preditiva.\\
+  Considere uma amostra de dados: $5, 4, 7, 3, 2, 5, 6, 8, 10$
+  Forneça a expressão da posteriori e o um valor predito para uma nova observação.
+
+\item Considere o problema de uma regressão linear simples usual com o regressor $x$ e a variável resposta $Y$.
+Deseja-se implementar um algorítmo para análise bayesiana deste modelo.
+Descreva os passos que seriam necessários e
+obtenha as expressões relevantes para implementação do algorítmo. 
+Inclua no algoritmo a possibilidade de predição.
+Faça escolhas qdo necessário como, por exemplo, de priori.
+
+% \item Escreva de maneira suscinta (um parágrafo com no máximo 10 linhas) como voce explicaria para um 
+%   pesquisador de outra área as características da análise bayesiana em contraste com outra(s) abordagem(ens).
+
+\item A classificação de qualidade de um componente elétrico é excelente ($y = 1$), bom ($y = 2$) ou ruim ($y = 3$). A probabilidade de vários níveis de qualidade dependem da fábrica onde é produzido ($\theta_1 = 0$: fábrica A, $\theta_1 = 1$: fábrica B) e do tipo de máquina ($\theta_2 = 0$: máquina I, $\theta_2 = 1$: máquina II, $\theta_2 = 2$: máquina III). As probabilidades para $y = 2$ são dadas pela Tabela~\ref{tab:exerc1a-cap4}.
+Além disso, distribuição conjunta de $(\theta_1, \theta_2)$ é dada na Tabela~\ref{tab:exerc1b-cap4}.
+Encontre a distribuição posteriori conjunta de $\theta_1, \theta_2|y = 2$ e cada uma das distribuições marginais. Tendo observado $y = 2$:
+\begin{enumerate}
+\item Qual a combinação fábrica/máquina é a mais provável de ter produzido esse componente?
+\item Qual a distribuição posteriori (conjunta)?
+\item Quais são as distribuições marginais?
+\item E as condicionais?  
+\item Esboce gráficos para os itens anteriores
+\end{enumerate}
+
+%%
+%% 2025 prova 2
+%%
+
+\item Seja $Y$ uma variável aleatória com distribuição normal de média igual a zero
+  e precisão $\tau$ sendo $\tau = 1/\sigma^2$. Será tomada uma amostra de $n$ observações
+  $y_1, y_2, \ldots y_n$ deste modelo.
+  \begin{enumerate}
+  \item Qual a priori conjugada para $\tau$?
+  \item Qual é a distribuição posteriori para a priori do item anterior?
+  \item Qual a priori de Jeffreys $\tau$?
+  \item Qual é a distribuição posteriori para a priori de Jeffreys?
+  \end{enumerate}
+
+\begin{solucao}
+\paragraph{\bf Solução} \mbox{} \\
+  \begin{itemize}
+  \item Priori conjugada: $\tau \sim {\rm Gama}(a, b):$ 
+    \[
+      \pi(\tau) \propto \tau^{a-1} e^{-b\tau}.
+    \]
+    
+  \item Posteriori para priori conjugada
+    \[
+      \tau|y \sim \mathrm{Gama}\left(a + \frac{n}{2},\; b + \frac{1}{2} \sum_{i=1}^n y_i^2\right).
+    \]
+  \item Priori de Jeffreys
+    \[
+      \pi_J(\tau) \propto 1/\tau.
+    \]
+  \item Posteriori para priori de Jeffreys
+    \[
+      \pi(\tau|y) \propto \tau^{n/2 - 1} \exp\left(-\frac{\tau}{2} \sum y_i^2\right).
+    \]
+  \end{itemize}
+\end{solucao}
+
+
+<<normal-precisao-jags, include = FALSE>>=
+library(rjags)
+library(coda)
+
+rm(list=ls())
+a <- 0.1
+b <- 0.1
+curve(dgamma(x, a, b), from=0, to=5, col="red", lwd=2,
+      xlab=expression(tau), ylab=expression(f(tau)))
+
+set.seed(2025)
+n <- 15
+tau <- 2 
+y <- round(rnorm(n, mean=0, sd=sqrt(1/tau)), dig=2)
+y
+
+## itens a, b) Modelo JAGS com Priori Conjugada (Gama)
+modelo1 <- "
+model {
+  ## Verossimilhança
+  for (i in 1:n) {
+    y[i] ~ dnorm(0, tau)
+  }
+  ## Priori
+  tau ~ dgamma(a, b) 
+  ## Parâmetro derivado (desvio padrão)
+  sigma <- 1 / sqrt(tau)
+}
+"
+dados <- list(y = y, n = n, a = a, b = b)
+
+modelo1.jags <- jags.model(
+    textConnection(modelo1),
+    data = dados,
+    n.chains = 3,
+    n.adapt = 100,
+    inits = list(
+        list(tau = 1),
+        list(tau = 0.5),
+        list(tau = 2)
+    ),
+    quiet = TRUE
+)
+
+update(modelo1.jags, 1000) # Burn-in
+
+ams1 <- coda.samples(
+  modelo1.jags,
+  variable.names = c("tau", "sigma"),
+  n.iter = 10000,
+  thin = 10
+)
+str(ams1)
+str(as.matrix(ams1))
+print(summary(ams1))
+plot(ams1)
+acf(as.matrix(ams1)[, "tau"])
+
+##print(gelman.diag(ams1))
+##gelman.plot(ams1)
+
+plot(ams1, trace = FALSE)
+plot(density(as.matrix(ams1)[, "tau"]))
+
+## Teóricas: resultados analíticos
+curve(dgamma(x, a, b), to=10, col=2, lwd=2, add=TRUE)
+n <- length(y)
+Sy2 <- sum(y^2)
+a.post <- a + n/2
+b.post <- b + Sy2/2
+curve(dgamma(x, a.post, b.post), to= 10, col=4, lwd=2, add=TRUE)
+
+## itens c, d) Modelo JAGS com Priori de Jeffreys
+## JAGS não aceita priori imprópria
+## Alternativas:
+## 1. usar priori Gama com parâmetros pequenos (0.001, 0.001)
+## 2. Priori uniforme em log(tau) (reparametrização/truncada)
+## 3. Usar outro software (Stan, NIMBLE, etc)
+
+modelo2 <- "
+model {
+  # Verossimilhança
+  for (i in 1:n) {
+    y[i] ~ dnorm(0, tau)
+  }
+  # Priori de Jeffreys (aproximada)
+  tau ~ dgamma(a, b)
+  # Função do parâmetro/reparametrização
+  sigma <- 1/sqrt(tau)
+}
+"
+
+dados <- list(y = y, n = n, a = 0.001, b = 0.001)
+
+modelo2.jags <- jags.model(
+    textConnection(modelo2),
+    data = dados,
+    n.chains = 3,
+    n.adapt = 100,
+    inits = list(
+        list(tau = 1),
+        list(tau = 0.5),
+        list(tau = 2)
+    ),
+    quiet = TRUE
+)
+update(modelo2.jags, 1000) # Burn-in
+ams2 <- coda.samples(
+    modelo2.jags,
+    variable.names = c("tau", "sigma"),
+    n.iter = 10000,
+    thin = 10
+)
+
+str(ams2)
+print(summary(ams2))
+plot(ams2)
+acf(as.matrix(ams2)[, "tau"])
+##print(gelman.diag(ams1))
+##gelman.plot(ams1)
+
+plot(ams2, trace = FALSE)
+plot(density(as.matrix(ams2)[, "tau"]))
+
+## Teóricas: resultados analíticos
+curve(dgamma(x, 0.001, 0.001), to=10, col=2, lwd=2, add=TRUE)
+n <- length(y)
+Sy2 <- sum(y^2)
+a.post <- 0 + n/2
+b.post <- 0 + Sy2/2
+curve(dgamma(x, a.post, b.post), to= 10, col=4, lwd=2, add=TRUE)
+@
+
+
+\item Seja uma variável aleatória $Y$ e o seguinte modelo de probabilidades: $Y|\theta \sim {\rm Bin}(n, \theta)$.
+  Adota-se como priori de $\theta$ uma mistura das distribuições ${\rm Beta}(2, 10)$ e $ {\rm Beta}(4, 2)$ com pesos 0,20 e 0,80, respectivamente.
+  Uma amostra forneceu $y = 6, n = 20$. Esboce os gráficos de cada componentes da priori. Obtenha a expressão da posteriori e um esboço do seu gráfico.
+
+\begin{solucao}
+\paragraph{\bf Solução} \mbox{} \\
+  Priori:
+  \[ P(\theta) = 0.20 * Beta(2,10) + 0.80 * Beta(4,2).\]
+  Observou-se \(y=6, n=20\). Verossimilhança:
+  \[ L(\theta|y) \propto \theta^6 (1-theta)^{20-6}. \]
+  Posteriori:
+  \[ P(\theta) = 0.4159 * Beta(8,24) + 0.5841 * Beta(10,16).\]
+
+\end{solucao}
+  
+<<mistura1, include = FALSE>>=
+rm(list=ls())
+n <- 20
+y <- 6
+a1 <- 2
+b1 <- 10
+a2 <- 4
+b2 <- 2
+w1.pri <- 0.2
+w2.pri <- 0.8
+w1.pos <- w1.pri * beta(y+a1,n-y+b1)/beta(a1,b1)
+w2.pos <- w2.pri * beta(y+a2,n-y+b2)/beta(a2,b2)
+pos1 <- w1.pos/(w1.pos + w2.pos)
+pos2 <- w2.pos/(w1.pos + w2.pos)
+ppos <- c(pos1, pos2)
+fpri <- function(x) w1.pri*dbeta(x, a1, b1) + w2.pri*dbeta(x, a2, b2)
+fpos <- function(x) pos1*dbeta(x, y+a1, n-y+b1) + pos2*dbeta(x, y+a2, n-y+b2)
+fvero <- function(x) dbeta(x, y+1, n-y+1)
+curve(fvero, from=0, to=1, n=1001, col=4, lty=2, lwd=2,
+            xlab=expression(theta), ylab=expression(paste("f(",theta,")")))
+curve(fpos, from=0, to=1, n=1001, col=1, lty=1, lwd=2, add = TRUE)
+curve(fpri, from=0, to=1, n=1001, col=2, lty=1, lwd=2, add=TRUE)
+legend("topright", c("Verossimilhança","Posteriori","Priori"), lwd = 2, lty=c(2,1,1), col=c(4,1,2), cex=0.7)
+##
+curve(dbeta(x, 2, 10), col = "red", lty = 2)
+curve(dbeta(x, 4, 2), col = "red", lty = 2, add = TRUE)
+fprior <- function(x) 0.2*dbeta(x, 2, 10) + 0.8*dbeta(x,4,2)
+curve(fprior, col = "red", lwd = 2, add = TRUE)
+w1 <- 0.2 * beta(8,24)/beta(2,10)
+w2 <- 0.8 * beta(10,16)/beta(4,2)
+p1 <- w1/(w1+w2)
+p2 <- w2/(w1+w2)
+fpost <- function(x) p1*dbeta(x, 8, 24) + p2*dbeta(x,10,16)
+curve(fpost, add = T, lwd = 2)
+##
+## simulando da posteriori
+N <- 1e6
+comp <- sample(1:2, N, prob = c(p1, p2), replace = TRUE)
+theta.sam <- rbeta(N, c(a1+y, a2+y)[comp], c(b1+n-y, b2+n-y)[comp])
+lines(density(theta.sam), lwd = 2, col = 4)
+@
+
+<<mistura1-jags, include = FALSE>>=
+modeloMistura <- "
+model {
+  # Verossimilhança
+  y ~ dbin(theta, n)
+  # Priori de Mistura
+  k ~ dcat(p)
+  theta ~ dbeta(alpha[k], beta[k])
+}
+"
+dados <- list(
+    y = 6, n = 20,
+    p = c(0.2, 0.8),
+    alpha = c(2, 4), beta = c(10, 2)
+)
+
+mistura.jags <- jags.model(
+  textConnection(modeloMistura),
+  data = dados,
+  n.chains = 3,
+  n.adapt = 100,
+  inits = list(
+      list(k = 1, theta = 0.5),
+      list(k = 2, theta = 0.5),
+      list(k = 1, theta = 0.5)
+  ),
+  quiet = TRUE
+)
+update(mistura.jags, 1000)
+amsMistura <- coda.samples(
+    mistura.jags,
+    variable.names = c("theta", "k"),
+    n.iter = 5000,
+    thin = 5
+)
+
+print(summary(amsMistura))
+plot(amsMistura)
+
+ams.m <- as.matrix(amsMistura)
+names(ams.m)
+prop.table(table(ams.m[, "k"]))
+acf(ams.m[, "theta"])
+
+curve(dbeta(x, 2, 10), col = "red", lty = 3)
+curve(dbeta(x, 4, 2), col = "red", lty = 3, add = TRUE)
+curve(fprior, col = "red", lwd = 2, add = TRUE)
+curve(fpost, add = T, lwd = 2)
+lines(density(ams.m[, "theta"]), col = "blue", lwd = 2)
+@
+
+
+\begin{table}[ht!]
+\centering
+\caption{Probabilidades condicionais $y = 2$}
+\label{tab:exerc1a-cap4}
+  \begin{tabular}{c| c c}
+    Pr($y = 2|\theta_1, \theta_2$)         &$\theta_1 = 0$          &$\theta_1 =1$\\
+    \hline
+    $\theta_2 = 0$                         &0,3                    &0,2\\
+    $\theta_2 = 1$                         &0,4                    &0,2\\
+    $\theta_2 = 2$                         &0,6                    &0,3\\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[ht!]
+\centering
+\caption{Probabilidade a priori das combinações fábrica/máquina}
+\label{tab:exerc1b-cap4}
+  \begin{tabular}{c| c c}
+    Pr($\theta_1, \theta_2$)               &$\theta_1 = 0$          &$\theta_1 =1$\\
+    \hline
+    $\theta_2 = 0$                         &0,1                    &0,2\\
+    $\theta_2 = 1$                         &0,2                    &0,3\\
+    $\theta_2 = 2$                         &0,1                    &0,1\\
+    \hline  
+\end{tabular}
+\end{table}
+
+%\begin{extra}
+%{\it Obtenha gráficos da priori, verossimilhança e posteriori deste problema.}
+%\end{extra}
+
+
+\item Explique os tópicos a seguir, incluindo exemplos, tendo como referência as aulas e materiais do curso.
+\begin{enumerate}
+  \item Priori imprópria.
+  \item Princípio da verossimilhança.
+  \item Reparametrizações, prioris equivalentes e invariância.
+\end{enumerate}
+
+  
+\item Seja $Y \sim {\rm Gamma}(\alpha, \lambda)$ com priori (independente) $\alpha \sim {\rm Gama}(a, b)$ e $\lambda \sim {\rm Gamma}(c, d)$
+  em que $\lambda, b \; {\rm e }\; d$ são parâmetros de taxa.
+
+  \begin{enumerate}
+  \item Obtenha a expressão da posteriori $f(\alpha, \lambda|y)$.
+  \item Obtenha a expressão da posteriori $f(\lambda|\alpha, y)$.
+  \item Obtenha a expressão da posteriori $f(\alpha|\lambda, y)$.
+  \item Obtenha a expressão da posteriori $f(\lambda|y)$.
+  \item Obtenha a expressão da posteriori $f(\alpha|y)$.
+  \item Explique como obter simulações de cada uma das distribuições acima. 
+  \item Explique como obter simulações da marginal (preditiva a priori). 
+  \item Explique como obter simulações da marginal (preditiva a posteriori). 
+  \item Foi proposto o seguinte algorítmo para simular da posteriori conjunta:
+    \begin{enumerate}
+    \item Escolha um valor inicial para $\alpha$.
+    \item Simule um valor de $f(\lambda|\alpha, y)$, em que $\alpha$ é o último valor obtido.
+    \item Simule um valor de $f(\alpha|\lambda, y)$, em que $\lambda$ é o último valor obtido.
+    \item Repita os dois passos anteriores $N$ vezes.     
+    \item Os $N$ pares $\alpha, \lambda$ são uma amostra de $f(\alpha, \lambda|y)$.
+    \end{enumerate}
+  \end{enumerate}
+
+\begin{solucao}
+\paragraph{\bf Solução} \mbox{} \\ 
+\begin{itemize}
+\item Conjunta
+\item Condicionais
+\item Marginais
+\end{itemize}
+\end{solucao} 
+
+<<gamagamagama1, include = FALSE, eval = FALSE>>=
+rm(list=ls())
+## Priori
+## alpha ~ Gamma(a, b)
+## lambda ~ Gamma(c, d)
+a <- 2; b <- 0.5
+c <- 3; d <- 0.5
+curve(dgamma(x, a, b), to = 15)
+curve(dgamma(x, c, d), to = 15, add = TRUE)
+dprior <- function(alp,lam, log = FALSE) {
+    res <- dgamma(alp, a, b, log = TRUE) + dgamma(lam, c, d, log = TRUE)
+    if(log) return(res)
+    else return(exp(res))
+}
+alpha.seq <- seq(0.1, 10, length = 201)
+lambda.seq <- seq(0.1, 10, length = 201)
+priori2d <- outer(alpha.seq, lambda.seq, dprior)
+image(alpha.seq, lambda.seq, priori2d,
+      xlab = expression(alpha), ylab = expression(lambda))
+      #axes = TRUE)
+contour(alpha.seq, lambda.seq, priori2d,
+        xlab = expression(alpha), ylab = expression(lambda))
+## Dados
+##curve(dgamma(x, 2, 5), to = 2)
+##alphaT <- 2; lambdaT <- 5
+##set.seed(25)
+##n <- 10
+##dados <- rgamma(n, alphaT, lambdaT)
+y <- c(0.15, 0.38, 0.28, 0.16, 1.64, 0.04, 0.19, 0.34, 0.14, 1.04)
+##MASS:fitdistr(dados, "gamma")
+## Posteriori (não normalizada)
+n <- length(y)
+S <- sum(y)
+#P <- prod(y)
+lP <- sum(log(y))
+dpost <- function(alp, lam, log = FALSE){
+##    a1 <- (gamma(alp)^(-n)*P^(alp-1)*exp(-b*alp)*lam^(n*alp + c -1)*exp(-(d + S)*lam)
+    res <- -n*lgamma(alp) + (alp - 1)*lP + (a-1)*log(alp) - b*alp + (n*alp + c - 1)*log(lam) - (d + S)*lam
+    if(log) return(res)
+    else return(exp(res))
+}
+post2d <- outer(alpha.seq, lambda.seq, dpost)
+image(alpha.seq, lambda.seq, post2d,
+      xlab = expression(alpha), ylab = expression(lambda))
+      #axes = TRUE)
+contour(alpha.seq, lambda.seq, post2d,
+        xlab = expression(alpha), ylab = expression(lambda))
+##
+contour(alpha.seq, lambda.seq, priori2d, col = "red",
+        xlab = expression(alpha), ylab = expression(lambda))
+contour(alpha.seq, lambda.seq, post2d, add = TRUE,
+        xlab = expression(alpha), ylab = expression(lambda))
+## condicionais
+dlambda.alpha <- function(lam, alp, log = FALSE){
+    dgamma(lam, n*alp + c, d + S, log = log)
+}
+curve(dlambda.alpha(x, alp = 1.5), to = 10, xlab = expression(lambda), ylab = expression(f(lambda, "|", alpha,y)))
+curve(dlambda.alpha(x, alp = 3), to = 10, add = TRUE)
+##
+dalpha.lambda <- function(alp, lam, log = FALSE){
+    res <- -n*lgamma(alp) + (alp - 1)*lP + (a - 1)*log(alp) - b*alp + (n*alp)*log(lam)
+    if(log) return(res)
+    else return(exp(res))
+}
+curve(dalpha.lambda(x, 2), to = 5, xlab = expression(f(alpha, "|", lambda,y)))
+##
+dalpha.y <- function(alp, log = FALSE){
+    res <- -n*lgamma(alp) + (alp - 1)*lP + (a - 1)*log(alp) - b*alp - (n*alp+c-1)*log(d+S) + lgamma(n*alp + c)
+    if(log) return(res)
+    else return(exp(res))    
+}
+curve(dalpha.y(x), to = 5,
+      xlab = expression(alpha), ylab = expression(paste("f(",alpha,"|y)")))
+
+dlambda.y <- Vectorize(function(lam, log = FALSE){
+    integrando <- function(alp){
+        dpost(alp, lam, log = FALSE)
+    }
+    res <- integrate(integrando, lower = 0, upper = Inf)$value
+    if(log) return(log(res))
+    else return(res)
+}, "lam")
+curve(dlambda.y(x), to = 10,
+      xlab = expression(lambda), ylab = expression(paste("f(",lambda, "|y)")))
+##
+## MCMC para dalpha.y
+tunning <- 1
+burnin <- 1e3
+thinning <- 10
+N <- 1e5 + burnin
+alpha.sam <- numeric(N)
+alpha.sam[1] <- 1
+acc <- 0
+for(i in 2:N){
+    alpha.prop <- rlnorm(1, mean = log(alpha.sam[i-1]), sd = tunning)
+    log.r <- dalpha.y(alpha.prop, log = TRUE) - dalpha.y(alpha.sam[i-1], log = TRUE) +
+        dlnorm(alpha.sam[i-1], mean = log(alpha.prop), sd = tunning, log = TRUE) -
+        dlnorm(alpha.prop, mean = log(alpha.sam[i-1]), sd = tunning, log = TRUE)
+##    print(c(alpha.sam[i-1], alpha.prop, exp(log.r)))
+    if(alpha.prop <= 0) {
+        alpha.sam[i] <- alpha.sam[i-1]
+        next
+    }
+    if(runif(1) < min(1, exp(log.r))){
+        alpha.sam[i] <- alpha.prop
+        acc <- acc + 1
+    }
+    else alpha.sam[i] <- alpha.sam[i-1]
+}
+cat("Taxa de aceitação:", acc/(N-1), "\n")
+
+alpha.sam <- alpha.sam[-(1:burnin)]
+plot(acf(alpha.sam))
+length(alpha.sam)
+alpha.sam <- alpha.sam[seq(1, length(alpha.sam), by = thinning)]
+length(alpha.sam)
+plot(acf(alpha.sam))
+## Simulando lambda|alpha,y
+lambda.sam <- rgamma(length(alpha.sam), n*alpha.sam + c, d + S)
+
+## Gráficos
+plot(alpha.sam, lambda.sam, pch = 20, cex = 0.5,
+     xlab = expression(alpha), ylab = expression(lambda))
+contour(alpha.seq, lambda.seq, post2d, add = TRUE, lwd = 2,
+        xlab = expression(alpha), ylab = expression(lambda))
+##
+## Gibbs para a posteriori conjunta
+##  1. amostra de alpha|lambda,y (MCMC)
+##  2. amostra de lambda|alpha,y (direto)
+N <- 1e5
+tunning <- 0.5
+burnin <- 1e3
+thinning <- 10
+acc <- 0
+alpha.gibbs <- numeric(N)
+lambda.gibbs <- numeric(N)
+alpha.gibbs[1] <- 1
+lambda.gibbs[1] <- 1
+
+acc <- 0
+for(i in 2:N){
+    ## alpha|lambda,y (MCMC)
+    alpha.prop <- rlnorm(1, mean = log(alpha.gibbs[i-1]), sd = tunning)
+    log.r <- dalpha.lambda(alpha.prop, lambda.gibbs[i-1], log = TRUE) - 
+        dalpha.lambda(alpha.gibbs[i-1], lambda.gibbs[i-1], log = TRUE) +
+        dlnorm(alpha.gibbs[i-1], mean = log(alpha.prop), sd = tunning, log = TRUE) -
+        dlnorm(alpha.prop, mean = log(alpha.gibbs[i-1]), sd = tunning, log = TRUE)
+    if(runif(1) < min(1, exp(log.r))){
+        alpha.gibbs[i] <- alpha.prop
+        acc <- acc + 1
+    }
+    else alpha.gibbs[i] <- alpha.gibbs[i-1]
+    ## lambda|alpha,y (direto)
+    lambda.gibbs[i] <- rgamma(1, n*alpha.gibbs[i] + c, d + S)
+}
+cat("Taxa de aceitação:", acc/(N-1), "\n")
+alpha.gibbs <- alpha.gibbs[-(1:burnin)]
+lambda.gibbs <- lambda.gibbs[-(1:burnin)]
+plot(acf(alpha.gibbs))
+plot(acf(lambda.gibbs))
+length(alpha.gibbs)
+alpha.gibbs <- alpha.gibbs[seq(1, length(alpha.gibbs), by = thinning)]
+lambda.gibbs <- lambda.gibbs[seq(1, length(lambda.gibbs), by = thinning)]
+length(alpha.gibbs)
+plot(acf(alpha.gibbs))
+plot(acf(lambda.gibbs))
+
+plot(alpha.gibbs, lambda.gibbs, pch = 20, cex = 0.5,
+     xlab = expression(alpha), ylab = expression(lambda))
+contour(alpha.seq, lambda.seq, post2d, add = TRUE, lwd = 2)
+##
+## Comparando marginais obtidas pelos 2 métodos/algorítmos
+##
+plot(density(alpha.sam), col = "red", lwd = 2,
+     xlab = expression(alpha), ylab = expression(f(alpha, "|", y)))
+lines(density(alpha.gibbs), col = "blue", lwd = 2)
+
+plot(density(lambda.sam), col = "red", lwd = 2,
+     xlab = expression(lambda), ylab = expression(f(lambda, "|", y)))
+lines(density(lambda.gibbs), col = "blue", lwd = 2)
+@ 
+
+<<gamagamagama2, include = FALSE, eval = FALSE>>=
+require(rjags)
+require(coda)
+
+modeloGama <- "
+model {
+  # Verossimilhança
+    for (i in 1:n) {
+        y[i] ~ dgamma(alpha, lambda)
+    }
+  # Prioris
+  alpha ~ dgamma(a, b)
+  lambda ~ dgamma(c, d)
+}
+"
+dados <- list(y = y, n = n,
+              a = a, b = b,
+              c = c, d = d)
+
+modeloGama.jags <- jags.model(
+    textConnection(modeloGama),
+    data = dG,
+    n.chains = 3,
+    n.adapt = 100,
+    inits = list(
+        list(alpha = 1, lambda = 3),
+        list(alpha = 2, lambda = 2),
+        list(alpha = 3, lambda = 0.5)
+    ),
+    quiet = TRUE
+)
+update(modeloGama.jags, 1000) # Burn-in
+amsGama <- coda.samples(
+    modeloGama.jags,
+    variable.names = c("alpha", "lambda"),
+    n.iter = 10000,
+    thin = 10
+)
+str(amsGama)
+print(summary(amsGama))
+plot(amsGama)
+amsG <- as.matrix(amsGama)
+
+acf(amsG[, "alpha"])
+acf(amsG[, "lambda"])
+
+plot(amsGama, trace = FALSE)
+
+
+## Comparando marginais obtidas pelos 3 métodos/algorítmos
+## para alpha
+## - amostragem exata
+plot(density(alpha.sam), col = "red",
+     xlab = expression(alpha), ylab = expression(paste("f(",alpha,"|, y)")))
+## - MCMC Gibbs (código)
+lines(density(alpha.gibbs), col = "blue", lwd = 2)
+## MCMC JAGS
+lines(density(amsG[, "alpha"]), col = "darkgreen", lwd = 3)
+
+## para lambda
+plot(density(lambda.sam), lwd = 1,
+     xlab = expression(lambda), ylab = expression(paste("f(",lambda, "|, y)")))
+lines(density(lambda.gibbs), col = "blue", lwd = 2)
+lines(density(amsG[, "lambda"]), col = "darkgreen", lwd = 3)
+@
+
+\item  Um teste para detectar a presença ou não de certa doença é aplicado em uma população. Sabe-se que o teste acerta 90\% dos que possuem a doença ({\it sensibilidade}) e 80\% dos que não a possuem ({\it especificidade}). A ocorrência da doença na população alvo é de 2\% ({\it prevalência}).
+O interesse é realizar uma análise bayesiana completa. Pede-se, explicando passo a passo:
+\begin{enumerate}
+\item {\bf Análise da Posteriori:} Determinar a probabilidade de um indivíduo ter a doença, dado um resultado positivo ({\it valor preditivo positivo}), e a probabilidade de não ter a doença, dado um resultado negativo ({\it valor preditivo negativo}).
+\item {\bf Análise pelo Fator de Bayes:} Avaliar a força da evidência fornecida por um teste positivo em favor da hipótese de que o paciente tem a doença, em comparação com a hipótese de que não a tem.
+\item {\bf Análise pela Teoria da Decisão:} Suponha que a perda (ou custo) de um diagnóstico {\it falso negativo} (diagnosticar "não doente" quando a pessoa tem a doença) seja 5 vezes maior que a perda de um diagnóstico {\it falso positivo} (diagnosticar "doente" quando a pessoa não tem a doença). Qual seria a decisão ótima entre diagnosticar como 'Doente' ou 'Não Doente' para cada resultado do teste, a fim de minimizar a perda esperada?
+\item Discuta os resultados.
+\item Discuta as características de cada e as diferenças dos métodos.
+\end{enumerate}
+
+<<include = FALSE>>=
+TD.f <- function(prev, sens, esp, FN.FP){
+    pr <- c(th0 = 1-prev, th1 = prev) 
+    M <- rbind(th0 = c(y0 = esp, y1 = 1-esp), th1 = c(1-sens, sens))
+    CJ <- pr * M
+    post <- prop.table(CJ, mar = 2)
+    py <- colSums(CJ)
+    ##
+    BF01y0 <- esp/(1-sens)
+    BF01y0.class <- cut(log10(BF01y0),
+        breaks = c(-Inf, 0, 1/2, 1, 3/2, 2, Inf),
+        labels = c("sem evidencia para H0", "mal vale mencionar", "substancial", "forte", "muito forte", "decisiva")
+        )
+    BF10y1 <- sens/(1-esp)
+    BF10y1.class <- cut(log10(BF10y1),
+        breaks = c(-Inf, 0, 1/2, 1, 3/2, 2, Inf),
+        labels = c("sem evidencia para H1", "mal vale mencionar", "substancial", "forte", "muito forte", "decisiva")
+        )
+    ##
+    L <- matrix(c(0, 1, FN.FP, 0), nrow = 2)
+    dimnames(L) <- list(
+        decisao = c("Não Doente", "Doente"),
+        th = c(0, 1)
+    )
+    post
+    EL <- L%*%post
+    minEL <- apply(EL, 2, min)
+    names(minEL) <- rownames(EL)[apply(EL, 2, which.min)]
+    list(
+        post = post,
+        py = py,
+        BF = c(BF01y0 = BF01y0, BF10y1 = BF10y1),
+        EL = EL,
+        minEL = minEL,
+        decisao = names(minEL)
+    )
+    RB <- drop(crossprod(minEL, py))
+    return(list(
+        post = post,
+        py = py,
+        BF = c(BF01y0 = BF01y0, BF10y1 = BF10y1),
+        BF.class = c(BF01y0 = as.character(BF01y0.class),
+                     BF10y1 = as.character(BF10y1.class)),
+        EL = EL,
+        decisao = minEL,
+        RB = RB
+    ))
+}
+(foo <- TD.f(prev = 0.02, sens = 0.9, esp = 0.8, FN.FP = 5))
+TD.f(prev = 0.02, sens = 0.9, esp = 0.8, FN.FP = 10)
+TD.f(prev = 0.02, sens = 0.9, esp = 0.8, FN.FP = 10)
+TD.f(prev = 0.02, sens = 0.9, esp = 0.8, FN.FP = 11)
+
+## Exemplo 5.2 do material:
+TD.f(prev = 0.10, sens = 0.9, esp = 0.85, FN.FP = 10)
+
+## encontrar razão de custos que muda decisão:
+fun1 <- function(FN.FP){
+    res <- TD.f(prev = 0.02, sens = 0.9, esp = 0.8, FN.FP = FN.FP)
+    res$EL[, "y1"]
+}
+bal <- t(sapply(c(1:20), fun1))
+matplot(1:20, bal, type = "l")
+
+fun2 <- function(FN.FP){
+    res <- TD.f(prev = 0.02, sens = 0.9, esp = 0.8, FN.FP = FN.FP)
+    abs(diff(res$EL[, "y1"]))
+}
+optimize(fun2, interval = c(1, 20))
+@ 
+
+\item Considere o contexto predição (a posteriori) Bayesiana, porém deseja-se obter somente o valor esperado e a variância da preditiva. Obtenha as expressões destas quantidades no modelo
+  de verossimilhança Poisson com priori Gamma.
+
+\item Explique de forma concisa a diferença entre intervalos frequentista, de verossimilhança e bayesiano (de quantis e HDI)
+
+
+\item Descreva o modelo sendo ajustado, distribuições envolvidas, parâmetros e constantes.
+  Esboce ainda a estrutura dos dados nas seguintes declarações de modelos em JAGS.
+
+\begin{enumerate}
+
+  \item
+\begin{verbatim}
+model{
+  for (i in 1:N){
+    x[i] ~ dbern(p)
+  }
+  p ~ dbeta(alpha, beta)
+  alpha <- 1
+  beta <- 1
+}
+\end{verbatim}
+
+  \item
+\begin{verbatim}
+model {
+  for (i in 1:n) {
+    y[i] ~ dnorm(0, tau)
+  }
+  tau ~ dgamma(a, b) 
+  sigma <- 1 / sqrt(tau)
+}
+\end{verbatim}
+
+\item
+\begin{verbatim}
+model{
+  for(i in 1:M){
+     for(j in 1:N){
+        y[i,j] ~ dnorm(mu[i], tau)
+     }
+     mu[i] ~ dnorm(theta, tauD)
+  }
+  tau <- pow(sigma, -2)
+  sigma ~ dunif(0, 100)
+  theta ~ dnorm(0, .001)
+  tauD <- pow(delta, -2)
+  delta ~ dunif(0, 100)
+}
+\end{verbatim}
+
+\item
+\begin{verbatim}
+model {
+    for (i in 1:n) {
+        y[i] ~ dgamma(alpha, lambda)
+    }
+  alpha ~ dgamma(a, b)
+  lambda ~ dgamma(c, d)
+}
+
+\end{verbatim}
+
+\item
+\begin{verbatim}
+model {
+  y ~ dbin(theta, n)
+  k ~ dcat(p)
+  theta ~ dbeta(alpha[k], beta[k])
+}
+\end{verbatim}
+
+\item
+\begin{verbatim}
+model{
+for(i in 1:n){
+    y[i] ~ dpois(mu[i])
+    mu[i] <- ifelse(i > k, lambda, theta)
+}
+k ~ dcat(ano[])
+theta ~ dgamma(a1, b1)
+lambda ~ dgamma(a2, b2)
+dif <- lambda - theta
+ib1 ~ dgamma(c1, d1)
+b1 <- 1/ib1
+ib2 ~ dgamma(c2, d2)
+b2 <- 1/ib2
+a1 <- 0.5
+a2 <- 0.5
+c1 <- 0.1
+c2 <- 0.1
+d1 <- 1
+d2 <- 1
+}
+\end{verbatim}
+\end{enumerate}
+
+
+
+\end{enumerate}
+
+\end{document}
+

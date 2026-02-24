@@ -1,0 +1,107 @@
+\thispagestyle{empty}
+\centering{\paragraph{Probabilidades}{\mbox{}}}
+
+% \begin{align*}
+% 	\mu_X = E[X] &= \sum_i x_i P(X=x_i) & \mbox{} & \sigma^2_X = Var[X] = \sum_i (x_i-\mu_x)^2 P(X=x_i)\\
+% 	\mu_X = E[X] &= \int x f_X(x) dx  & \mbox{}  & \sigma^2_X = Var[X] = \int (x-\mu_x)^2  f_X(x) \\ 
+% 	Y &= g(X)    & \Rightarrow & f_Y(y) = f_X(g^{-1}(y)) \left| \frac{{\rm d}}{{\rm d}y}g^{-1}(y)\right|
+% \end{align*}
+
+\begin{minipage}[c]{0.3\textwidth}
+\begin{align*}
+  \mu_X = E[X] &= \sum_i x_i P(X=x_i)\\
+  \mu_X = E[X] &= \int x f_X(x) dx
+\end{align*}
+\end{minipage}%
+\begin{minipage}[c]{0.3\textwidth}
+\begin{align*}
+  \sigma^2_X = Var[X] = \sum_i (x_i-\mu_x)^2 P(X=x_i) \\
+  \sigma^2_X = Var[X] = \int (x-\mu_x)^2  f_X(x)
+\end{align*}
+\end{minipage}%
+\begin{minipage}[c]{0.3\textwidth}
+\begin{align*}
+  Y &= g(X) \Rightarrow \\
+  f_Y(y) &= f_X(g^{-1}(y)) \left| \frac{{\rm d}}{{\rm d}y}g^{-1}(y)\right| 
+\end{align*}
+\end{minipage}
+
+
+\vspace{0.3cm}
+\centering{\paragraph{Distribuições de Probabilidade}{\mbox{}}}
+
+\begin{tabular}{lllll} 
+\hline
+Distribuição & Probab./Densidade & Domínio & E[X] & Var[X] \\
+\hline
+$X \sim {\rm U}(k)$ & $\frac{1}{k}$ & $x=1, 2, \ldots, k$  & $\frac{min(X) + max(x)}{2}$ & $\sqrt{\frac{(max(X) - min(X) + 1)^2 -1}{12}}$  \\
+\\
+$X \sim {\rm B}(n,p)$ & $\binom{n}{x} p^x (1-p)^{n-x}$ & $x=0, 1, 2, \ldots, n$ 
+&  $np$ & $np(1-p)$ \\
+\\
+$X \sim {\rm HG}(N, K, n)$ & $\frac{\binom{K}{x}\binom{N-K}{n-x}}{\binom{N}{n}}$ &  $x=0, 1, \ldots, {\rm min}(K,n)$ & $np$ & $np(1-p)\frac{N-n}{N-1}$ \\
+\\
+$X \sim {\rm P}(\lambda)$ &  $\frac{e^{-\lambda} \lambda^x}{x!}$ & $x=0, 1, 2, \ldots$ & $\lambda$ & $\lambda$ \\
+\\
+$X \sim {\rm G}(p)$ &  $(1-p)^{x}p$ & $x=0, 1, 2, \ldots$
+& $\frac{1-p}{p}$ & $\frac{(1-p)}{p^2}$ \\
+\\
+$X \sim {\rm BN}(r,p)$ &  $\binom{x+r-1}{r-1} (1-p)^{x} p^r$ & $x=0, 1, 2, \ldots$ 
+& $\frac{r(1-p)}{p}$ & $\frac{r(1-p)}{p^2}$ \\
+\\
+\hline
+$X \sim {\rm U}[a,b]$ & $\frac{1}{b-a}$ & $a \leq x \leq b$ & $\frac{a+b}{2}$ & $\frac{(b-a)^2}{12}$ \\
+\\
+$X \sim {\rm N}(\mu, \sigma^2)$ &  $\frac{1}{\sqrt{2\pi\sigma^2}}\exp\{-\frac{1}{2\sigma^2}(x - \mu)^2\}$ & $x \in (-\infty, \infty)$ & $\mu$ & $\sigma^2$ \\
+\\
+$X \sim {\rm HalfN}(0, \sigma^2)$ &  $\frac{\sqrt{2}}{\sigma\sqrt{\pi}}\exp\{-\frac{x^2}{2\sigma^2}\} $ & $x \in (0, \infty)$ & $0$ & $\sigma^2$ \\
+\\
+$X \sim {\rm LN}(\mu, \sigma^2)$ &  $\frac{1}{x \sqrt{2\pi\sigma^2}}\exp\{-\frac{1}{2\sigma^2}({\rm ln}(x) - \mu)^2\}$ & $x \in (-\infty, \infty)$ & $ \exp\{\mu + \sigma^2/2\}$ & $\exp\{2\mu + \sigma^2\}(\exp\{\sigma^2\} -1)$ \\
+\\
+$X \sim {\rm Exp}(\lambda)$ & $ \lambda\exp(-\lambda x)$ & $x \geq 0$ & 
+$ \frac{1}{\lambda}$ & $\frac{1}{\lambda^2}$ \\
+\\
+$X \sim {\rm Exp}(\phi)$ & $ \frac{}{\phi}\exp(-x/\phi)$ & $x \geq 0$ & 
+$ \frac{1}{\phi}$ & $\frac{1}{\phi^2}$ \\
+\\
+$X \sim {\rm Erlang}(\lambda, r)$ & $ \lambda^r x^{r-1} \exp(-\lambda x)/(r-1)!$ & $x \geq 0,  r = 1, 2, \ldots$ & 
+$ \frac{r}{\lambda}$ & $\frac{r}{\lambda^2}$ \\
+\\
+$X \sim \chi^2(\nu)$ & $\frac{1}{2^{\nu/2}\Gamma(\nu/2) \, \beta^\alpha} \; x^{\nu/2 \,-1} \; \exp\{-x/2\}$ & $x \geq 0$  & $\nu$ & $2\nu$  \\
+\\
+$X \sim I\chi^2(\nu)$ & $\frac{2^{\nu/2}}{\Gamma(\nu/2) \, \beta^\alpha} \; x^{-\nu/2 \,-1} \; \exp\{-1/2x\}$ & $x \geq 0$  & $\frac{1}{\nu-2}$ & $\frac{2}{(\nu-1)^2(\nu-4)}$  \\
+\\
+$X \sim {\rm Ga}(\alpha, \beta)$ & $\frac{1}{\beta^\alpha\Gamma(\alpha)} \; x^{\alpha-1} \; \exp\{-x/\beta\}$ & $x \geq 0$  & $\alpha\beta$ & $\alpha\beta^2$  \\
+	$X \sim {\rm Ga}(p, q)$ & $\frac{q^p}{\Gamma(p)} \; x^{p-1} \; \exp\{-q x\}$ & $x \geq 0$  & $\frac{p}{q}$ & $\frac{p}{q^2}$  \\
+$X \sim {\rm IGa}(\alpha, \beta)$ & $\frac{1}{\beta^\alpha\Gamma(\alpha)} \; x^{-\alpha-1} \; \exp\{-1/(\beta x)\}$ & $x \geq 0$  & $\beta(\alpha-1) (\alpha>1)$  & $\frac{1}{\beta^2(\alpha-1)^2(\alpha-2)}(\alpha>2)$  \\
+	$X \sim {\rm IGa}(p, q)$ & $\frac{q^p}{\Gamma(p)} \; x^{-p-1} \; \exp\{-q/x)\}$ & $x \geq 0$  & $\frac{q}{p-1} (p>1)$  & $\frac{q^2}{(p-1)^2(p-2)}(p>2)$  \\
+\\
+$X \sim {\rm UniGa}(\alpha, \beta)$ & $\frac{\alpha^{\beta}}{\Gamma(\beta)} t^{\alpha - 1} \left[\log\left(\frac{1}{t}\right) \right]^{\beta - 1}$  &  $x \in (0,1) $  & $\left(\frac{\alpha}{\alpha + 1}\right)^\beta$ &  $\left[\left(\frac{\alpha}{\alpha + 2}\right)^\beta - \left(\frac{\alpha}{\alpha + 1}\right)^{2\beta} \right]$ \\
+\\
+$X \sim {\rm Weibull}(\alpha, \beta)$ & $\frac{\alpha}{\beta} \; (x/\beta)^{\alpha-1} \exp\{-(x/\beta)^{\alpha}\}$  &  $x \geq 0$  & $\beta \; \Gamma(1+\frac{1}{\alpha})$ &  $\beta^{2} \left[\Gamma(1+\frac{2}{\alpha}) - \Gamma^2(1+\frac{1}{\alpha}) \right]$ \\
+\\
+  $X \sim {\rm Beta}(\alpha, \beta)$ & $\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)\Gamma(\beta)} \; x^{\alpha-1} (1-x)^{\beta-1}$  &  $0 \leq x \leq 1$ & $\frac{\alpha}{\alpha+\beta}$ & $\frac{\alpha \; \beta}{(\alpha+\beta)^2 (\alpha + \beta + 1)}$ \\
+  \\
+$X \sim {\rm Pareto}(\alpha, t_m)$ & $\frac{\alpha t_m^{\alpha}}{t^{\alpha+1}}$  &  $x \geq t_m$  & $\frac{\alpha t_m^2}{(\alpha - 1)^2 (\alpha - 2)}$ &  $\frac{\alpha t_m^2}{(\alpha - 1)^2 (\alpha - 2)}$ \\
+\\
+$X \sim {\rm Lomax}(\alpha, \beta)$ & $\frac{\alpha}{\beta} \left[1 + \frac{t}{b} \right]^{-(\alpha+1)} = \alpha \frac{\beta^\alpha}{(\beta+t)^{\alpha + 1}}$  &  $t \geq 0$  & $\frac{\beta}{\alpha - 1}$ &  $\frac{\alpha \beta^2}{(\alpha - 1)^2 (\alpha - 2)}$ \\
+\vspace{0.2cm}\\
+%\\
+%$X \sim GEV(\mu, \sigma, \xi)$ & $\frac{1}{\sigma}\left[1+\xi\left(\frac{x-\mu}{\sigma}\right)\right]^{(-1/\xi)-1} \exp\left\{-\left[1+\xi\left(\frac{x-\mu}{\sigma}\right)\right]^{-1/\xi}\right\}$ & $1+\xi(x-\mu)/\sigma>0$ & $\mu-\frac{\sigma}{\xi}+\frac{\sigma}{\xi}\Gamma(1-\xi)$ & $\frac{\sigma^2}{\xi^2}(\Gamma(1-2\xi)-\Gamma(1-\xi)^2)$ \\
+\hline
+\end{tabular}
+
+
+\begin{align*}
+& Z = (X-\mu)/\sigma &
+&\Gamma(\alpha) = \int_0^{\infty} x^{\alpha-1} \; \exp\{-x\} \; dx &
+& \Gamma(\alpha) = (\alpha-1)! &
+& \Gamma(\alpha+1) = \alpha\;\Gamma(\alpha)
+\end{align*}
+
+%$X \sim N(\mu, \sigma^2)$ \;\; ; \;\; z = \frac{x-\mu}{\sigma}
+
+% \paragraph{Testes de Hipótese}
+% & \text{Estatística de teste} & & \text{Valor de referência} & & \text{Obs}\\
+% \hline
+% \end{align*}
