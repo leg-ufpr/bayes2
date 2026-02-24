@@ -1,17 +1,16 @@
-# CE-315 (antiga ce227)
+# CE-062(C) Tópicos: Modelagem Bayesiana
 
-[![deploy](https://github.com/leg-ufpr/ce227/actions/workflows/run.yml/badge.svg)](https://github.com/leg-ufpr/ce227/actions/workflows/run.yml)
 
 ## Inferência Bayesiana
 
-Repositório das disciplina **Inferência Bayesiana** (CE-315), ministrada
-na UFPR, para o curso de Estatística. Versão atualizada de CE-227.
+Repositório da disciplina optativa **Modelagem Bayesiana**, ministrada
+na UFPR, para o curso de Estatística e Ciência de Dados.
 
-Este repositório contém todo o material de aula e os arquivos
+Este repositório contém materiais de aula e os arquivos
 necessários para gerar a página da disciplina, disponível em:
-http://www.leg.ufpr.br/ce315
+http://www.leg.ufpr.br/bayes2
 
-### Para gerar o site
+### Para gerar o site () verificar se ainda funciona
 
 O site é todo construído usando apenas o [R Markdown][], por isso, o
 código fonte está nos arquivos `Rmd`. Para gerar o site você precisará
@@ -24,13 +23,6 @@ das versões mais recentes dos pacotes `rmarkdown` e `knitr`.
 library(rmarkdown)
 render_site()
 ```
-
-**Observações** (desatualizado):
-
-A publicação no site é automatizada através do [GitHub
-Actions](https://github.com/leg-ufpr/ce227/actions), e o arquivo de
-interesse é o
-[.github/workflows/run.yml](https://github.com/leg-ufpr/ce227/blob/master/.github/workflows/run.yml).
 
 [Licença Creative Commons 4.0]: https://creativecommons.org/licenses/by-nc-sa/4.0/deed.pt_BR
 [R Markdown]: http://rmarkdown.rstudio.com
