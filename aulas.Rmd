@@ -22,10 +22,11 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
 
 - **23/02 (Seg)**: Apresentação da disciplina. Teorema de Bayes e releitura como um problema de inferência e de classificação. Exemplos: (i) bolas na urna e (ii) questão de prova. Tabela de cálculos para obtenção de posteriori para o caso de parâmetro discreto.
   - *Atividade 1: Revisar, anterar e expandir exemplos vistos em aula. Escrever um código para generalizar os cálculos dos exemplos.* 
-  - *Atividade 2: Fazer exercícios 2 e 6 da [lista de questões da disciplina introdutória](http://www.leg.ufpr.br/~paulojus/bayes2/exercicios/questoes.pdf).*
+  - *Atividade 2: Visitar a [página de exemplos de teorema de Bayes](http://www.leg.ufpr.br/~paulojus/bayes2/exercicios/exBayes.html) relacionada com o conteúdo da primeira aula.*
+  - *Atividade 3: Fazer exercícios 2 e 6 da [lista de questões da disciplina introdutória](http://www.leg.ufpr.br/~paulojus/bayes2/exercicios/questoes.pdf).*
 - **25/02 (Qua)**: Sem aula expositiva: atividades da semana de recepção de calouros do Curso de Estatística e Ciência de Dados. 
   - *Atividade 1: Escolher uma distribuição de probabilidades de um parâmetro (se tiver mais que um fixe demais em algum valor). Fazer os passos da análise bayesiana básica: obter verossimilhança, definir priori, obter posteriori e preditivas (a priori e posteriori).* 
-- **02/03 (Seg)**: Discussão dos desenvolvimentos da *Atividade 1* da aula anterior.
+- **02/03 (Seg)**: Discussão dos desenvolvimentos da *Atividade 1* da aula de 25/02.
 
 
 <!--
