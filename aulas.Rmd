@@ -27,6 +27,9 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
 - **25/02 (Qua)**: Sem aula expositiva: atividades da semana de recepção de calouros do Curso de Estatística e Ciência de Dados. 
   - *Atividade 1: Escolher uma distribuição de probabilidades de um parâmetro (se tiver mais que um fixe demais em algum valor). Fazer os passos da análise bayesiana básica: obter verossimilhança, definir priori, obter posteriori e preditivas (a priori e posteriori).* 
 - **02/03 (Seg)**: Discussão dos desenvolvimentos da *Atividade 1* da aula de 25/02.
+- **04/03 (Qua)**: Taxas Bayesianas empíricas.
+  - *Atividade 1: Estudar exemplo 8.2 do texto do curso.*
+  - *Atividade 2: Rodar, interpretar e discutir resultados dos comandos no script [EBest.R](scripts/EBest.R).*
 
 
 <!--
