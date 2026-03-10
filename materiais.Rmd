@@ -34,6 +34,11 @@ output:
 
 - Taxas e Bayes empírico: [arquivo de comandos](scripts/EBest.R)
 
+- Aproximações da posteriori
+  - Discreta: [arquivo1](scripts/03a-propDiscreta.R)
+  - Gaussiana: [arquivo2](scripts/03b-posteriorAprox.R)
+  - MCMC: [arquivo3](scripts/03c-propMCMCPacks.R)
+
 <!--
 2. [Arquivo de comandos](scripts/MC-RV.R) Probabilidades e Monte Carlo. Identificar cálculos feitos, completar expressões e discutir. 
 3. [Arquivo de comandos](scripts/IntroComputation-binom1.R) Introdução a computação (Monte Carlo) Bayesiana. Associar códigos com conceitos e expressões da análise Bayesiana do modelo Binomial de priori Beta. Explorar outras possibilidades, por exemplo, outras prioris.
