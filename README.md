@@ -19,7 +19,8 @@ workflow `.github/workflows/render-and-publish.yml`:
 
 1. Instala o R e os pacotes `rmarkdown` e `knitr`
 2. Renderiza o site com `rmarkdown::render_site()` (saída em `docs/`)
-3. Publica o resultado no [GitHub Pages][]
+3. Publica o resultado no branch `gh-pages` via [peaceiris/actions-gh-pages][]
+4. O site fica disponível em https://cursos.leg.ufpr.br/bayes2
 
 ### Para gerar o site localmente
 
@@ -39,3 +40,4 @@ render_site()
 [R Markdown]: http://rmarkdown.rstudio.com
 [GitHub Actions]: https://docs.github.com/en/actions
 [GitHub Pages]: https://pages.github.com
+[peaceiris/actions-gh-pages]: https://github.com/peaceiris/actions-gh-pages
