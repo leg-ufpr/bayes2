@@ -13,7 +13,7 @@ http://www.leg.ufpr.br/bayes2
 
 ### Publicação automática
 
-A cada `git push` para os branches `main` ou `master`, o site é
+A cada `git push` para o branch `main`, o site é
 automaticamente renderizado e publicado via [GitHub Actions][]. O
 workflow `.github/workflows/render-and-publish.yml`:
 
