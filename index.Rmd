@@ -8,9 +8,7 @@ output:
 ```{r setup, include=FALSE, cache=FALSE}
 source("setup_knitr.R")
 ```
-<!--
-[![deploy](https://github.com/leg-ufpr/ce227/actions/workflows/run.yml/badge.svg)](https://github.com/leg-ufpr/ce227/actions/workflows/run.yml)
--->
+[![deploy](https://github.com/leg-ufpr/bayes2/actions/workflows/render-and-publish.yml/badge.svg)](https://github.com/leg-ufpr/bayes2/actions/workflows/render-and-publish.yml)
 
 <center>
 ![](images/evobayes.jpg){width=5in}
