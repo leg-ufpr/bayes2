@@ -30,6 +30,10 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
 - **04/03 (Qua)**: Taxas Bayesianas empíricas.
   - *Atividade 1: Estudar exemplo 8.2 do texto do curso.*
   - *Atividade 2: Rodar, interpretar e discutir resultados dos comandos no script [EBest.R](scripts/EBest.R).*
+- **09/03 (Seg)**: Mais discussões sobre taxas bayesianas empíricas.
+- **11/03 (Qua)**: Aproximações da posteriori.
+  - Pré aula: [arquivo1](scripts/03a-propDiscreta.R), [arquivo2](scripts/03b-posteriorAprox.R), [arquivo3](scripts/03c-propMCMCPacks.R)
+
 
 
 <!--

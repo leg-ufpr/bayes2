@@ -30,6 +30,10 @@ output:
 2. [Formatando a solução do Teorema de Bayes](exercicios/exBayes.html). Diversos exemplos.
 3. [Lista de questões](exercicios/questoes.pdf)
 
+## Arquivo de comandos
+
+- Taxas e Bayes empírico: [arquivo de comandos](scripts/EBest.R)
+
 <!--
 2. [Arquivo de comandos](scripts/MC-RV.R) Probabilidades e Monte Carlo. Identificar cálculos feitos, completar expressões e discutir. 
 3. [Arquivo de comandos](scripts/IntroComputation-binom1.R) Introdução a computação (Monte Carlo) Bayesiana. Associar códigos com conceitos e expressões da análise Bayesiana do modelo Binomial de priori Beta. Explorar outras possibilidades, por exemplo, outras prioris.
