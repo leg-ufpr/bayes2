@@ -31,8 +31,12 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
   - *Atividade 1: Estudar exemplo 8.2 do texto do curso.*
   - *Atividade 2: Rodar, interpretar e discutir resultados dos comandos no script [EBest.R](scripts/EBest.R).*
 - **09/03 (Seg)**: Mais discussões sobre taxas bayesianas empíricas.
-- **11/03 (Qua)**: Aproximações da posteriori.
-  - Pré aula: [arquivo1](scripts/03a-propDiscreta.R), [arquivo2](scripts/03b-posteriorAprox.R), [arquivo3](scripts/03c-propMCMCPacks.R)
+- **11/03 (Qua)**: Computação Bayesiana por simulação. Aproximações da posteriori: discretização e aproximação normal.
+  - Pré aula: [arquivo1](scripts/03a-propDiscreta.R), [arquivo2](scripts/03b-posteriorAprox.R).
+  - *Atividade 1: Implementar a simulação bayesiana "direta" discutida em aula para os modelos vistos (prioris beta e triangular). Fazer para modelo de duas proporções.*
+  - *Atividade 2: Implementar a discretização para ao menos três modelos de verossimilhança.*
+- **Próxima aula: 16/03 (Seg)**: Aproximação da porteriori por simulação (MCMC e outros).
+  - Pré aula: [arquivo3](scripts/03c-propMCMCPacks.R)
 
 
 
