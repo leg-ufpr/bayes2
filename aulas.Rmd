@@ -39,6 +39,9 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
   - Pré aula: [arquivo3](scripts/03c-propMCMCPacks.R)
 - **18/03 (Qua)**: Modelos hierárquicos (cont.). Simulação e exemplo de implementação em Jags e Stan.
   - **Atividade 1:** analisar [dados dos acertos de lance livres](dados/FTrockets.csv)
+- **23/03 (Seg)**: Aula cancelada devido a interrupaçõd e energia.
+- **25/03 (Qua)**: Inferência no modelo nornal e introdução a regressão bayesiana.
+  - **Atividade 1:**
 
 
 <!--
