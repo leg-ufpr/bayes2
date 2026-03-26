@@ -21,11 +21,11 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
 
 
 - **23/02 (Seg)**: Apresentação da disciplina. Teorema de Bayes e releitura como um problema de inferência e de classificação. Exemplos: (i) bolas na urna e (ii) questão de prova. Tabela de cálculos para obtenção de posteriori para o caso de parâmetro discreto.
-  - *Atividade 1: Revisar, anterar e expandir exemplos vistos em aula. Escrever um código para generalizar os cálculos dos exemplos.* 
+  - *Atividade 1: Revisar, anterar e expandir exemplos vistos em aula. Escrever um código para generalizar os cálculos dos exemplos.*
   - *Atividade 2: Visitar a [página de exemplos de teorema de Bayes](http://www.leg.ufpr.br/~paulojus/bayes2/exercicios/exBayes.html) relacionada com o conteúdo da primeira aula.*
   - *Atividade 3: Fazer exercícios 2 e 6 da [lista de questões da disciplina introdutória](http://www.leg.ufpr.br/~paulojus/bayes2/exercicios/questoes.pdf).*
-- **25/02 (Qua)**: Sem aula expositiva: atividades da semana de recepção de calouros do Curso de Estatística e Ciência de Dados. 
-  - *Atividade 1: Escolher uma distribuição de probabilidades de um parâmetro (se tiver mais que um fixe demais em algum valor). Fazer os passos da análise bayesiana básica: obter verossimilhança, definir priori, obter posteriori e preditivas (a priori e posteriori).* 
+- **25/02 (Qua)**: Sem aula expositiva: atividades da semana de recepção de calouros do Curso de Estatística e Ciência de Dados.
+  - *Atividade 1: Escolher uma distribuição de probabilidades de um parâmetro (se tiver mais que um fixe demais em algum valor). Fazer os passos da análise bayesiana básica: obter verossimilhança, definir priori, obter posteriori e preditivas (a priori e posteriori).*
 - **02/03 (Seg)**: Discussão dos desenvolvimentos da *Atividade 1* da aula de 25/02.
 - **04/03 (Qua)**: Taxas Bayesianas empíricas.
   - *Atividade 1: Estudar exemplo 8.2 do texto do curso.*
@@ -38,10 +38,15 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
 - **16/03 (Seg)**: Aproximação da posteriori por simulação (MCMC e outros). Introdução a modelos hierárquicos.
   - Pré aula: [arquivo3](scripts/03c-propMCMCPacks.R)
 - **18/03 (Qua)**: Modelos hierárquicos (cont.). Simulação e exemplo de implementação em Jags e Stan.
+  - Exemplo simulado em aula: [Beta-binomial](pages/beta-bin-hier-aula.html)
   - **Atividade 1:** analisar [dados dos acertos de lance livres](dados/FTrockets.csv)
-- **23/03 (Seg)**: Aula cancelada devido a interrupaçõd e energia.
-- **25/03 (Qua)**: Inferência no modelo nornal e introdução a regressão bayesiana.
-  - **Atividade 1:**
+- **23/03 (Seg)**: Aula cancelada devido a interrupção de energia.
+- **25/03 (Qua)**: Inferência no modelo nornal e introdução a regressão
+  bayesiana.
+  - Comparação das abordagens de inferência para [modelos de regressão](pages/regressao_linear_unificado_aula.html)
+  - **Atividades:** Ver no final da página acima. Usar os [dados de altura e
+    peso](dados/dados_turma_bayes2.csv) da turma para desenvolver o modelo e
+    pensar em diferentes prioris.
 
 
 <!--
@@ -50,4 +55,3 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
   - *Atividade 2: criar uma base de dados que reproduza o exemplo do teste de diagnóstico. A base deve ter 10.000 dados e o resultado de três exames com as mesmas características.*
 
 -->
-
