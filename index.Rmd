@@ -51,7 +51,7 @@ source("setup_knitr.R")
 
 - **Avaliação** (datas a confirmar):
   - A nota na disciplina a média ponderada de avaliações (90%) e trabalho (10%).
-      - **25/03/2026**: Primeira Avaliação
+      - **01/04/2026**: Primeira Avaliação
       - **06/05/2026**: Segunda Avaliação
       - **17/06/2026**: Terceira Avaliação
       - **a definir/05/2026**: Entrega e apresentação dos trabalhos. (pode ser antecipada a pedido)

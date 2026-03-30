@@ -41,11 +41,9 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
   - Exemplo simulado em aula: [Beta-binomial](pages/beta-bin-hier-aula.html)
   - **Atividade 1:** analisar [dados dos acertos de lance livres](dados/FTrockets.csv)
 - **23/03 (Seg)**: Aula cancelada devido a interrupção de energia.
-- **25/03 (Qua)**: Inferência no modelo nornal e introdução a regressão
-  bayesiana.
+- **25/03 (Qua)**: Inferência no modelo normal e introdução à regressão bayesiana.
   - Comparação das abordagens de inferência para [modelos de regressão](pages/regressao_linear_unificado_aula.html)
-  - **Atividades:** Ver no final da página acima. Usar os [dados de altura e
-    peso](dados/dados_turma_bayes2.csv) da turma para desenvolver o modelo e
+  - **Atividades:** Ver no final da página acima. Usar os [dados de altura e peso](dados/dados_turma_bayes2.csv) da turma para desenvolver o modelo e
     pensar em diferentes prioris.
 
 

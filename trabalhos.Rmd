@@ -5,10 +5,14 @@ output:
     toc: false
 ---
 
+**Trabalho 1: ** escolher um modelo/procedimento para análise de algum tipo de dados e apresetnar as análises não Bayesiana e Bayesiana na forma da um relatório
+em formato pdf ou html.
 
-- [Trabalho 1: Inferência Bayesiana para um parâmetro](./trabalhos/TrabInfBayes1Par.html) 
+
 
 <!--
+- [Trabalho 1: Inferência Bayesiana para um parâmetro](./trabalhos/TrabInfBayes1Par.html) 
+
 - [Trabalho 2: Reescrita e computação questões da prova 2](./trabalhos/ce315-prova2-2024.pdf)
 -->
 
