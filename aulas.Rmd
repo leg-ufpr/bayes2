@@ -45,7 +45,10 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
   - Comparação das abordagens de inferência para [modelos de regressão](pages/regressao_linear_unificado_aula.html)
   - **Atividades:** Ver no final da página acima. Usar os [dados de altura e peso](dados/dados_turma_bayes2.csv) da turma para desenvolver o modelo e
     pensar em diferentes prioris.
-
+- **30/03 (Seg)**: Introdução à atualização bayesiana em regressão. Análise dos
+  dados de altura e peso da turma (ver [script](scripts/turma.R)). Finalização
+  dos [modelos de regressão](pages/regressao_linear_unificado_aula.html).
+- **01/04 (Qua)** Prova 1.
 
 <!--
 - **07/08 (Qui)**: Discussão do questionário. Revisões conceituais - Teorema de Bayes.
