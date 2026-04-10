@@ -49,6 +49,9 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
   dados de altura e peso da turma (ver [script](scripts/turma.R)). Finalização
   dos [modelos de regressão](pages/regressao_linear_unificado_aula.html).
 - **01/04 (Qua)** Prova 1.
+- **06/04 (Seg)** "O falso dilema: Estatística Bayesiana vs Clássica"
+  [PDF](slides/pos.pdf)
+- **08/04 (Qua)** Atualização sequencial. Exemplo [Beta-Binomial](scripts/atualizacao-sequencial-beta-binomial.R).
 
 <!--
 - **07/08 (Qui)**: Discussão do questionário. Revisões conceituais - Teorema de Bayes.
