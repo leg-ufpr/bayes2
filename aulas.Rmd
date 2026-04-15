@@ -51,7 +51,10 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
 - **01/04 (Qua)** Prova 1.
 - **06/04 (Seg)** "O falso dilema: Estatística Bayesiana vs Clássica"
   [PDF](slides/pos.pdf)
-- **08/04 (Qua)** Atualização sequencial. Exemplo [Beta-Binomial](scripts/atualizacao-sequencial-beta-binomial.R).
+- **08/04 (Qua)** Atualização sequencial. Exemplo
+  [Beta-Binomial](scripts/atualizacao-sequencial-beta-binomial.R).
+- **13/04 (Seg)**
+- **15/04 (Qua)** [Regressão múltipla](pages/cap7_modelos_lineares_anova_ancova.html)
 
 <!--
 - **07/08 (Qui)**: Discussão do questionário. Revisões conceituais - Teorema de Bayes.
