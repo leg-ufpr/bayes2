@@ -53,8 +53,9 @@ cat(paste0("- **", datas1, " (Ter)", "**:\n", "- **", datas2, " (Qui)", "**:\n")
   [PDF](slides/pos.pdf)
 - **08/04 (Qua)** Atualização sequencial. Exemplo
   [Beta-Binomial](scripts/atualizacao-sequencial-beta-binomial.R).
-- **13/04 (Seg)**
-- **15/04 (Qua)** [Regressão múltipla](pages/cap7_modelos_lineares_anova_ancova.html)
+- **13/04 (Seg)** Demonstração da obtenção das posteriores para parâmetros de
+  regressão com prioris normais.
+- **15/04 (Qua)** [Regressão múltipla](pages/cap7_modelos_lineares_anova_ancova.html).
 
 <!--
 - **07/08 (Qui)**: Discussão do questionário. Revisões conceituais - Teorema de Bayes.
